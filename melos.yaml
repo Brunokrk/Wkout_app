@@ -1,0 +1,5 @@
+name: wkoutapp
+
+packages:
+  - apps/**
+  - packages/**
