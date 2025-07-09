@@ -1,4 +1,4 @@
-import 'package:authentication/presentation/pages/home/auth_home_view_model.dart';
+import 'package:authentication/src/presentation/pages/home/auth_home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

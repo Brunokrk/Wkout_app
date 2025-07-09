@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 abstract class WkoutBaseViewModel extends ChangeNotifier {
     bool _screenLoading = false;
     bool get screenLoading => _screenLoading;
