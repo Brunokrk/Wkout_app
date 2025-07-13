@@ -8,4 +8,16 @@ class WkoutInjector {
   static WkoutInjector get instance => _instance ??= WkoutInjector._();
 
   final GetIt _getIt = GetIt.instance;
+
+  void registerSingleton<T extends Object>(FactoryFunc<T> factory, {String? instanceName}) {
+    if (!_getIt.isRegistered<T>()) {
+      _getIt.registerLazySingleton<T>(factory, instanceName: instanceName);
+    }
+  }
+
+   void registerFactory<T extends Object>(FactoryFunc<T> factoryFunc, {String? instanceName}){
+    if(!_getIt.isRegistered<T>()) {
+      _getIt.registerFactory(factoryFunc, instanceName: instanceName);
+    }
+  }
 }
