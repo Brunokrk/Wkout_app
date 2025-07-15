@@ -1,4 +1,3 @@
-import 'package:design_system/src/tokens/colors.dart';
 import 'package:flutter/material.dart';
 
 class WkPrimaryButton extends StatelessWidget {
