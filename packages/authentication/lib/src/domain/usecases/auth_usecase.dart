@@ -12,6 +12,8 @@ class AuthUseCase extends WkoutBaseService {
   // Estado do usuário
   UserModel? _currentUser;
 
+  bool isRed = true;
+
   /// Obtém o usuário atual
   UserModel? get currentUser => _currentUser;
 

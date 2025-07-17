@@ -1,12 +1,12 @@
-import 'package:wkout_core/wkout_core.dart';
-import 'package:authentication/authentication.dart';
+import "package:authentication/authentication.dart";
+import 'package:wkout_core/wkout_core.dart';    
 
 import '../data_source/auth_service.dart';
 import '../dto/auth_dto.dart';
 import '../../domain/models/user_model.dart';
 
 /// Repository que transforma DTOs em Models
-class AuthRepository {
+class AuthRepository implements IAuthRepository {
   final AuthService _authService;
 
   AuthRepository({AuthService? authService})
@@ -26,13 +26,15 @@ class AuthRepository {
   }
 
   /// Login: Service retorna UserDto → Repository transforma em UserModel
-  Future<UserModel> login({required String email, required String password}) async {
+  @override
+  Future<UserModel> login(
+      {required String email, required String password}) async {
     try {
       final userDto = await _authService.login(
         email: email,
         password: password,
       );
-      
+
       return _mapUserDtoToModel(userDto);
     } catch (e) {
       throw Exception('Erro no login: $e');
@@ -40,6 +42,7 @@ class AuthRepository {
   }
 
   /// Register: Service retorna UserDto → Repository transforma em UserModel
+  @override
   Future<UserModel> register({
     required String email,
     required String password,
@@ -51,7 +54,7 @@ class AuthRepository {
         password: password,
         name: name,
       );
-      
+
       return _mapUserDtoToModel(userDto);
     } catch (e) {
       throw Exception('Erro no registro: $e');
@@ -59,20 +62,22 @@ class AuthRepository {
   }
 
   /// Get Current User: Service retorna UserDto → Repository transforma em UserModel
-  Future<UserModel?> getCurrentUser() async {
+  @override
+  Future<UserModel> getCurrentUser() async {
     try {
       final userDto = await _authService.getCurrentUser();
-      
+
       if (userDto != null) {
         return _mapUserDtoToModel(userDto);
       }
-      return null;
+      throw Exception('Usuário não encontrado');
     } catch (e) {
       throw Exception('Erro ao obter usuário atual: $e');
     }
   }
 
   /// Logout: Service retorna void → Repository retorna void
+  @override
   Future<void> logout() async {
     try {
       await _authService.logout();
@@ -82,6 +87,7 @@ class AuthRepository {
   }
 
   /// Update User: Service retorna UserDto → Repository transforma em UserModel
+  @override
   Future<UserModel> updateUser({required UserModel user}) async {
     try {
       // Converter UserModel para UserDto para enviar ao service
@@ -96,10 +102,10 @@ class AuthRepository {
       );
 
       final updatedUserDto = await _authService.updateUser(user: userDto);
-      
+
       return _mapUserDtoToModel(updatedUserDto);
     } catch (e) {
       throw Exception('Erro ao atualizar usuário: $e');
     }
   }
-} 
+}

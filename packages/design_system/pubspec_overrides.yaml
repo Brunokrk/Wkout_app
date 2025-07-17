@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: wkout_core
+dependency_overrides:
+  wkout_core:
+    path: ..\\wkout_core

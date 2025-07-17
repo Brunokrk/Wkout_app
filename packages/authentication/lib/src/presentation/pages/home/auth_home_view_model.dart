@@ -16,6 +16,8 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
 
   UserModel? get user => _authUseCase.currentUser;
 
+  bool get isRed => _authUseCase.isRed;
+
   bool get isAuthenticated => _authUseCase.isAuthenticated;
 
   String get displayName => _authUseCase.displayName;
@@ -25,6 +27,11 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
   bool get hasAvatar => _authUseCase.hasAvatar;
 
   String? get avatarUrl => _authUseCase.avatarUrl;
+
+  void toggleRed() {
+    _authUseCase.isRed = !_authUseCase.isRed;
+    notifyListeners();
+  }
 
   Future<void> login(String email, String password) async {
     try {
