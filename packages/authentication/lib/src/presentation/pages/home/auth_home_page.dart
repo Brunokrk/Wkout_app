@@ -28,7 +28,8 @@ class _AuthHomePageState extends State<AuthHomePage> {
     return Scaffold(
       backgroundColor: viewModel.isRed ? Colors.red : Colors.black,
       body: WkoutLoading<AuthHomeViewModel>(
-        child: Consumer<AuthHomeViewModel>(builder: (context, viewModel, child) {
+        child:
+            Consumer<AuthHomeViewModel>(builder: (context, viewModel, child) {
           return CustomScrollView(
             controller: _scrollController,
             slivers: [
@@ -36,7 +37,10 @@ class _AuthHomePageState extends State<AuthHomePage> {
                 child: Center(
                   child: Column(
                     children: [
-                      Text('Auth Home Page'),
+                      AuthImageWidget(
+                        imagePath: AuthenticationImagePaths.logoPNG,
+                      ),
+                    
                       ElevatedButton(
                         onPressed: () {
                           viewModel.toggleRed();
@@ -47,7 +51,6 @@ class _AuthHomePageState extends State<AuthHomePage> {
                   ),
                 ),
               ),
-              
             ],
           );
         }),

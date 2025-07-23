@@ -14,12 +14,12 @@ dependencies:
     path: ../design_system
   wkout_core:
     path: ../wkout_core
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -27,6 +27,10 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/svg/
+    - assets/images/png/
 
   # To add assets to your package, add an assets section, like this:
   # assets:
