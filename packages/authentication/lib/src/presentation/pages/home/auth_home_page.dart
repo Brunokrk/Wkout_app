@@ -26,7 +26,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<AuthHomeViewModel>();
     return Scaffold(
-      backgroundColor: viewModel.isRed ? Colors.red : Colors.black,
+      //backgroundColor: viewModel.isRed ? Colors.red : Colors.black,
       body: WkoutLoading<AuthHomeViewModel>(
         child:
             Consumer<AuthHomeViewModel>(builder: (context, viewModel, child) {
@@ -40,17 +40,42 @@ class _AuthHomePageState extends State<AuthHomePage> {
                       AuthImageWidget(
                         imagePath: AuthenticationImagePaths.logoPNG,
                       ),
-                    
-                      ElevatedButton(
-                        onPressed: () {
-                          viewModel.toggleRed();
-                        },
-                        child: const Text('Logout'),
+                      Container(
+                        width: 340,
+                        height: 180,
+                        decoration: BoxDecoration(
+                          color: AppColors.grey,
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(40,0,40,0),
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            AppButton(
+                              label: "Já possuo uma conta",
+                              kind: ButtonKind.primary,
+                              onPressed: () {
+                                viewModel.toggleRed();
+                              },
+                            ),
+                            AppButton(
+                              label: "Ainda não possuo uma conta",
+                              kind: ButtonKind.secondary,
+                              onPressed: () {
+                                viewModel.toggleRed();
+                              },
+                            ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
+              
             ],
           );
         }),
