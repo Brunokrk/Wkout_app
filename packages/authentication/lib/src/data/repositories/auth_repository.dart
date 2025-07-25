@@ -19,7 +19,6 @@ class AuthRepository implements IAuthRepository {
       email: dto.email,
       name: dto.name,
       age: dto.age,
-      avatarUrl: dto.avatarUrl,
       createdAt: dto.createdAt,
       updatedAt: dto.updatedAt,
     );
@@ -96,7 +95,6 @@ class AuthRepository implements IAuthRepository {
         email: user.email,
         name: user.name,
         age: user.age,
-        avatarUrl: user.avatarUrl,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       );

@@ -108,7 +108,6 @@ class AuthUseCase extends WkoutBaseService {
   Future<void> updateUser({
     String? name,
     int? age,
-    String? avatarUrl,
   }) async {
     if (_currentUser == null) {
       throw Exception('Usuário não autenticado');
@@ -122,7 +121,6 @@ class AuthUseCase extends WkoutBaseService {
       final updatedUser = _currentUser!.copyWith(
         name: name,
         age: age,
-        avatarUrl: avatarUrl,
       );
 
       // Executar atualização via repository
@@ -242,9 +240,5 @@ class AuthUseCase extends WkoutBaseService {
   /// Verifica se o usuário tem nome
   bool get hasName => _currentUser?.hasName ?? false;
 
-  /// Verifica se o usuário tem avatar
-  bool get hasAvatar => _currentUser?.hasAvatar ?? false;
 
-  /// Obtém a URL do avatar
-  String? get avatarUrl => _currentUser?.avatarUrl;
 } 

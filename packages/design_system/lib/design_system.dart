@@ -6,3 +6,5 @@ export 'src/tokens/spacing.dart';
 export 'src/theme/app_theme.dart';
 export 'src/components/appButton.dart';
 export 'src/components/loading.dart';
+export 'src/components/textInput.dart';
+export 'src/components/spacing.dart';

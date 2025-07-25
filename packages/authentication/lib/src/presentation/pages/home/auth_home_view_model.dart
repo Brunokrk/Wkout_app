@@ -1,3 +1,4 @@
+import 'package:authentication/src/presentation/enum/authSteps.dart';
 import 'package:wkout_core/wkout_core.dart';
 
 import '../../../domain/models/user_model.dart';
@@ -8,6 +9,7 @@ import '../../../data/repositories/auth_repository.dart';
 /// Usa uma única AuthUseCase para todas as operações
 class AuthHomeViewModel extends WkoutBaseViewModel {
   final AuthUseCase _authUseCase;
+  AuthSteps authStep = AuthSteps.initial;
 
   AuthHomeViewModel({AuthUseCase? authUseCase})
       : _authUseCase = authUseCase ?? AuthUseCase(
@@ -24,16 +26,12 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
 
   bool get hasName => _authUseCase.hasName;
 
-  bool get hasAvatar => _authUseCase.hasAvatar;
-
-  String? get avatarUrl => _authUseCase.avatarUrl;
-
   void toggleRed() {
     _authUseCase.isRed = !_authUseCase.isRed;
     notifyListeners();
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> makeLogin(String email, String password) async {
     try {
       toggleScreenLoading();
       clearScreenError();
@@ -53,7 +51,7 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
   }
 
   /// Executa registro usando a AuthUseCase
-  Future<void> register({
+  Future<void> makeRegister({
     required String email,
     required String password,
     required String name,
@@ -77,6 +75,12 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
     } finally {
       toggleScreenLoading();
     }
+  }
+
+  /// Alterna o passo de autenticação
+  void toggleAuthStep(AuthSteps step) {
+    authStep = step;
+    notifyListeners();
   }
 
   /// Obtém usuário atual usando a AuthUseCase
@@ -127,7 +131,6 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
       await _authUseCase.updateUser(
         name: name,
         age: age,
-        avatarUrl: avatarUrl,
       );
 
       notifyListeners();
