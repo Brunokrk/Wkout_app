@@ -12,7 +12,6 @@ class AuthenticationModule extends WkoutModule<AuthenticationModule> {
 
   @override
   Future<void> unregisterInjections() async {
-    // GetIt não tem método unregister, então não precisamos fazer nada aqui
   }
 
   @override
