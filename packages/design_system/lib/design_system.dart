@@ -8,3 +8,4 @@ export 'src/components/appButton.dart';
 export 'src/components/loading.dart';
 export 'src/components/textInput.dart';
 export 'src/components/spacing.dart';
+export 'src/components/dateInput.dart';

@@ -46,7 +46,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
                       if (viewModel.authStep == AuthSteps.login)
                         _buildLoginForm(viewModel),
                       if (viewModel.authStep == AuthSteps.register)
-                        _buildRegisterForm(),
+                        _buildRegisterForm(viewModel),
                     ],
                   ),
                 ),
@@ -105,9 +105,35 @@ class _AuthHomePageState extends State<AuthHomePage> {
     );
   }
 
-  Widget _buildRegisterForm() {
-    return SliverToBoxAdapter(
-      child: Container(),
+  Widget _buildRegisterForm(AuthHomeViewModel viewModel) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    TextEditingController ageController = TextEditingController();
+    return Container(
+      width: 340,
+      decoration: BoxDecoration(
+        color: AppColors.grey,
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            CustomTextInput(label: "Nome completo", hint: "Nome completo", controller: nameController),
+            Spacing.vertical(16),
+            CustomTextInput(label: "Email", hint: "Digite seu email", inputType: InputType.email, controller: emailController),
+            Spacing.vertical(16),
+            CustomTextInput(label: "Senha", hint: "Digite sua senha", controller: passwordController, inputType: InputType.password),
+            Spacing.vertical(16),
+            CustomDateInput(label: "Data de nascimento", hint: "Data de nascimento", controller: ageController),
+            Spacing.vertical(16),
+            AppButton(label: "Cadastrar", onPressed: () {
+              viewModel.makeRegister(name: nameController.text, email: emailController.text, password: passwordController.text);
+            }),
+          ],
+        ),
+      ),
     );
   }
 

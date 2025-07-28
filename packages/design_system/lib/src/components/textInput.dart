@@ -28,10 +28,10 @@ class CustomTextInput extends StatelessWidget {
         return _buildEmailInput();
       case InputType.password:
         return _buildPasswordInput();
-      // case InputType.phone:
-      //   return _buildPhoneInput();
-      // case InputType.name:
-      //   return _buildNameInput();
+      case InputType.phone:
+        return _buildPhoneInput();
+      case InputType.name:
+        return _buildNameInput();
       default:
         return _buildDefaultInput();
     }
@@ -67,6 +67,30 @@ class CustomTextInput extends StatelessWidget {
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         labelText: label,
+        hintText: hint,
+      ),
+    );
+  }
+
+  Widget _buildPhoneInput() {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        labelText: label,
+        icon: Icon(Icons.phone),
+        hintText: hint,
+      ),
+    );
+  }
+
+  Widget _buildNameInput() {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        labelText: label,
+        icon: Icon(Icons.person),
         hintText: hint,
       ),
     );
