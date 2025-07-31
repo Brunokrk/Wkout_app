@@ -188,12 +188,12 @@ class RegisterDto extends BaseDto with ValidationMixin {
 }
 
 /// DTO para dados do usuário
-class UserDto extends BaseDto with ValidationMixin {
+class UserDto extends BaseDto{
   final String id;
   final String email;
   final String? name;
-  final int? age;
-  final String? avatarUrl;
+  //final int? age;
+  //final String? avatarUrl;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -201,8 +201,8 @@ class UserDto extends BaseDto with ValidationMixin {
     required this.id,
     required this.email,
     this.name,
-    this.age,
-    this.avatarUrl,
+    //this.age,
+    //this.avatarUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -213,8 +213,8 @@ class UserDto extends BaseDto with ValidationMixin {
       id: user.id,
       email: user.email ?? '',
       name: user.userMetadata?['name'] as String?,
-      age: user.userMetadata?['age'] as int?,
-      avatarUrl: user.userMetadata?['avatar_url'] as String?,
+      //age: user.userMetadata?['age'] as int?,
+      //avatarUrl: user.userMetadata?['avatar_url'] as String?,
       createdAt: user.createdAt != null ? DateTime.parse(user.createdAt!) : null,
       updatedAt: user.updatedAt != null ? DateTime.parse(user.updatedAt!) : null,
     );
@@ -226,8 +226,8 @@ class UserDto extends BaseDto with ValidationMixin {
       'id': id,
       'email': email,
       'name': name,
-      'age': age,
-      'avatarUrl': avatarUrl,
+      //'age': age,
+     // 'avatarUrl': avatarUrl,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
@@ -239,8 +239,8 @@ class UserDto extends BaseDto with ValidationMixin {
       id: changes['id'] ?? id,
       email: changes['email'] ?? email,
       name: changes['name'] ?? name,
-      age: changes['age'] ?? age,
-      avatarUrl: changes['avatarUrl'] ?? avatarUrl,
+      //age: changes['age'] ?? age,
+      //avatarUrl: changes['avatarUrl'] ?? avatarUrl,
       createdAt: changes['createdAt'] != null 
           ? DateTime.parse(changes['createdAt']) 
           : createdAt,
@@ -265,20 +265,12 @@ class UserDto extends BaseDto with ValidationMixin {
       errors.add('Nome não pode estar vazio');
     }
     
-    if (age != null && !ValidationRules.range(13, 120).isValid(age)) {
-      errors.add('Idade deve estar entre 13 e 120 anos');
-    }
+    // if (age != null && !ValidationRules.range(13, 120).isValid(age)) {
+    //   errors.add('Idade deve estar entre 13 e 120 anos');
+    // }
     
     return errors;
   }
-
-  @override
-  Map<String, List<ValidationRule>> get validationRules => {
-    'id': [ValidationRules.required],
-    'email': [ValidationRules.required, ValidationRules.email],
-    'name': [ValidationRules.minLengthDefault],
-    'age': [ValidationRules.range(13, 120)],
-  };
 
   @override
   dynamic getFieldValue(String field) {
@@ -289,8 +281,8 @@ class UserDto extends BaseDto with ValidationMixin {
         return email;
       case 'name':
         return name;
-      case 'age':
-        return age;
+      //case 'age':
+      //  return age;
       default:
         return null;
     }
@@ -301,8 +293,8 @@ class UserDto extends BaseDto with ValidationMixin {
       id: map['id'] ?? '',
       email: map['email'] ?? '',
       name: map['name'],
-      age: map['age'],
-      avatarUrl: map['avatarUrl'],
+      //age: map['age'],
+      //avatarUrl: map['avatarUrl'],
       createdAt: map['createdAt'] != null 
           ? DateTime.parse(map['createdAt']) 
           : null,

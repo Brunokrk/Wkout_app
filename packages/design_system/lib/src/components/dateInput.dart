@@ -3,14 +3,10 @@ import 'package:flutter/material.dart';
 
 class CustomDateInput extends StatefulWidget {
   final String label;
-  final String hint;
   final TextEditingController controller;
 
   const CustomDateInput(
-      {super.key,
-      required this.label,
-      required this.hint,
-      required this.controller});
+      {super.key, required this.label, required this.controller});
 
   @override
   State<CustomDateInput> createState() => _CustomDateInputState();
@@ -40,13 +36,19 @@ class _CustomDateInputState extends State<CustomDateInput> {
       ),
       child: Row(
         children: [
-          Text(widget.label),
-          Spacing.horizontal(16),
           IconButton(
               onPressed: () async {
                 _selectDate();
               },
-              icon: Icon(Icons.calendar_month))
+              icon: Icon(Icons.calendar_month)),
+
+          TextButton(
+              onPressed: () async {
+                _selectDate();
+              },
+              child: Text(selectedDate != null
+                  ? "${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate!.month.toString().padLeft(2, '0')}/${selectedDate!.year}"
+                  : widget.label)),
         ],
       ),
     );

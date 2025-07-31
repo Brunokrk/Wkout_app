@@ -21,9 +21,6 @@ abstract class BaseDto {
   /// Verifica se o DTO é válido
   bool get isValid;
   
-  /// Obtém erros de validação
-  List<String> get validationErrors;
-  
   @override
   String toString() {
     return '${runtimeType}(${toMap()})';
