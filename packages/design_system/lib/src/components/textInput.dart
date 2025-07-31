@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 enum InputType {
@@ -9,13 +10,13 @@ enum InputType {
 
 class CustomTextInput extends StatelessWidget {
   final String label;
-  final String hint;
+ 
   final TextEditingController controller;
   final InputType? inputType;
 
   const CustomTextInput({
     required this.label,
-    required this.hint,
+   
     required this.controller,
     this.inputType,
     super.key,
@@ -41,10 +42,14 @@ class CustomTextInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: label,
-        icon: Icon(Icons.email),
-        hintText: hint,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        icon: Icon(Icons.email),       
+        fillColor: AppColors.backgroundLight,
+        filled: true,
+        constraints: BoxConstraints(minHeight: 40, maxHeight: 40),
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       ),
     );
   }
@@ -53,10 +58,14 @@ class CustomTextInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         icon: Icon(Icons.password),
-        hintText: hint,
+        fillColor: AppColors.backgroundLight,
+        filled: true,
+        constraints: BoxConstraints(maxHeight: 40),
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       ),
     );
   }
@@ -65,9 +74,13 @@ class CustomTextInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: label,
-        hintText: hint,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        fillColor: AppColors.backgroundLight,
+        filled: true,
+        constraints: BoxConstraints(maxHeight: 40),
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       ),
     );
   }
@@ -76,10 +89,14 @@ class CustomTextInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         icon: Icon(Icons.phone),
-        hintText: hint,
+        fillColor: AppColors.backgroundLight,
+        filled: true,
+        constraints: BoxConstraints(maxHeight: 40),
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       ),
     );
   }
@@ -88,10 +105,14 @@ class CustomTextInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         icon: Icon(Icons.person),
-        hintText: hint,
+        fillColor: AppColors.backgroundLight,
+        filled: true,
+        constraints: BoxConstraints(maxHeight: 40),
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       ),
     );
   }

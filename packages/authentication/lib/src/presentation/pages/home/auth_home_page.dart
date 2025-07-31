@@ -24,6 +24,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
   late TextEditingController _registerEmailController;
   late TextEditingController _registerPasswordController;
   late TextEditingController _registerAgeController;
+  late TextEditingController _registerNicknameController;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
     _registerEmailController = TextEditingController();
     _registerPasswordController = TextEditingController();
     _registerAgeController = TextEditingController();
+    _registerNicknameController = TextEditingController();
     
     super.initState();
   }
@@ -122,14 +124,14 @@ class _AuthHomePageState extends State<AuthHomePage> {
           children: [
             CustomTextInput(
               label: "Email",
-              hint: "Digite seu email",
+             
               inputType: InputType.email,
               controller: _loginEmailController,
             ),
             Spacing.vertical(16),
             CustomTextInput(
               label: "Senha",
-              hint: "Digite sua senha",
+            
               controller: _loginPasswordController,
               inputType: InputType.password,
             ),
@@ -140,15 +142,19 @@ class _AuthHomePageState extends State<AuthHomePage> {
                 viewModel.makeLogin(_loginEmailController.text, _loginPasswordController.text);
               },
             ),
-            Spacing.vertical(16),
-            AppButton(
-                label: "Ainda não possuo uma conta",
-                kind: ButtonKind.secondary,
-                onPressed: () {
-                  _clearLoginFields();
-                  viewModel.toggleAuthStep(AuthSteps.register);
-                },
-              ),
+            //
+            TextButton(onPressed: () {
+              _clearLoginFields();
+              viewModel.toggleAuthStep(AuthSteps.register);
+            }, child: Text("Ainda não possuo uma conta!", style: TextStyle(color: AppColors.blackText, fontSize: 16, fontWeight: FontWeight.w600 ),)),
+            // AppButton(
+            //     label: "Ainda não possuo uma conta",
+            //     kind: ButtonKind.secondary,
+            //     onPressed: () {
+            //       _clearLoginFields();
+            //       viewModel.toggleAuthStep(AuthSteps.register);
+            //     },
+            //   ),
           ],
         ),
       ),
@@ -166,11 +172,13 @@ class _AuthHomePageState extends State<AuthHomePage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            CustomTextInput(label: "Nome completo", hint: "Nome completo", controller: _registerNameController),
+            CustomTextInput(label: "Nome completo", controller: _registerNameController),
             Spacing.vertical(16),
-            CustomTextInput(label: "Email", hint: "Digite seu email", inputType: InputType.email, controller: _registerEmailController),
+            CustomTextInput(label: "Email", inputType: InputType.email, controller: _registerEmailController),
             Spacing.vertical(16),
-            CustomTextInput(label: "Senha", hint: "Digite sua senha", controller: _registerPasswordController, inputType: InputType.password),
+            CustomTextInput(label: "Nome de usuário", controller: _registerNicknameController),
+            Spacing.vertical(16),
+            CustomTextInput(label: "Senha",  controller: _registerPasswordController, inputType: InputType.password),
             Spacing.vertical(16),
             CustomDateInput(label: "Data de nascimento", controller: _registerAgeController),
             Spacing.vertical(16),
