@@ -1,9 +1,11 @@
 import "package:authentication/authentication.dart";
 import 'package:authentication/src/presentation/enum/authSteps.dart';
+import 'package:authentication/src/routes/auth_routes.dart';
 import "package:design_system/design_system.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:wkout_core/wkout_core.dart';
 
 class AuthHomePage extends StatefulWidget {
   const AuthHomePage({super.key});
@@ -14,11 +16,11 @@ class AuthHomePage extends StatefulWidget {
 
 class _AuthHomePageState extends State<AuthHomePage> {
   late ScrollController _scrollController;
-  
+
   // Controllers para o formulário de login
   late TextEditingController _loginEmailController;
   late TextEditingController _loginPasswordController;
-  
+
   // Controllers para o formulário de registro
   late TextEditingController _registerNameController;
   late TextEditingController _registerEmailController;
@@ -32,7 +34,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
       ..addListener(() {
         setState(() {});
       });
-    
+
     // Inicializar controllers
     _loginEmailController = TextEditingController();
     _loginPasswordController = TextEditingController();
@@ -41,7 +43,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
     _registerPasswordController = TextEditingController();
     _registerAgeController = TextEditingController();
     _registerNicknameController = TextEditingController();
-    
+
     super.initState();
   }
 
@@ -124,14 +126,12 @@ class _AuthHomePageState extends State<AuthHomePage> {
           children: [
             CustomTextInput(
               label: "Email",
-             
               inputType: InputType.email,
               controller: _loginEmailController,
             ),
             Spacing.vertical(16),
             CustomTextInput(
               label: "Senha",
-            
               controller: _loginPasswordController,
               inputType: InputType.password,
             ),
@@ -139,22 +139,23 @@ class _AuthHomePageState extends State<AuthHomePage> {
             AppButton(
               label: "Entrar",
               onPressed: () {
-                viewModel.makeLogin(_loginEmailController.text, _loginPasswordController.text);
+                viewModel.makeLogin(
+                    _loginEmailController.text, _loginPasswordController.text);
               },
             ),
             //
-            TextButton(onPressed: () {
-              _clearLoginFields();
-              viewModel.toggleAuthStep(AuthSteps.register);
-            }, child: Text("Ainda não possuo uma conta!", style: TextStyle(color: AppColors.blackText, fontSize: 16, fontWeight: FontWeight.w600 ),)),
-            // AppButton(
-            //     label: "Ainda não possuo uma conta",
-            //     kind: ButtonKind.secondary,
-            //     onPressed: () {
-            //       _clearLoginFields();
-            //       viewModel.toggleAuthStep(AuthSteps.register);
-            //     },
-            //   ),
+            TextButton(
+                onPressed: () {
+                  _clearLoginFields();
+                  viewModel.toggleAuthStep(AuthSteps.register);
+                },
+                child: Text(
+                  "Ainda não possuo uma conta!",
+                  style: TextStyle(
+                      color: AppColors.blackText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                )),
           ],
         ),
       ),
@@ -172,24 +173,43 @@ class _AuthHomePageState extends State<AuthHomePage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            CustomTextInput(label: "Nome completo", controller: _registerNameController),
+            CustomTextInput(
+                label: "Nome completo",
+                controller: _registerNameController,
+                inputType: InputType.name),
             Spacing.vertical(16),
-            CustomTextInput(label: "Email", inputType: InputType.email, controller: _registerEmailController),
+            CustomTextInput(
+                label: "Email",
+                inputType: InputType.email,
+                controller: _registerEmailController),
             Spacing.vertical(16),
-            CustomTextInput(label: "Nome de usuário", controller: _registerNicknameController),
+            CustomTextInput(
+                label: "Senha",
+                controller: _registerPasswordController,
+                inputType: InputType.password),
             Spacing.vertical(16),
-            CustomTextInput(label: "Senha",  controller: _registerPasswordController, inputType: InputType.password),
-            Spacing.vertical(16),
-            CustomDateInput(label: "Data de nascimento", controller: _registerAgeController),
-            Spacing.vertical(16),
-            AppButton(label: "Cadastrar", onPressed: () {
-              viewModel.makeRegister(name: _registerNameController.text, email: _registerEmailController.text, password: _registerPasswordController.text);
-            }),
-            Spacing.vertical(16),
-            AppButton(label: "Voltar", kind: ButtonKind.secondary, onPressed: () {
-              _clearRegisterFields();
-              viewModel.toggleAuthStep(AuthSteps.login);
-            }),
+            AppButton(
+                label: "Continuar",
+                onPressed: () {
+                  WkoutNavigationService()
+                      .go(context, AuthRoutes.registerProfile);
+                  // viewModel.makeRegister(
+                  //     name: _registerNameController.text,
+                  //     email: _registerEmailController.text,
+                  //     password: _registerPasswordController.text);
+                }),
+            TextButton(
+                onPressed: () {
+                  _clearRegisterFields();
+                  viewModel.toggleAuthStep(AuthSteps.login);
+                },
+                child: Text(
+                  "Já possuo uma conta!",
+                  style: TextStyle(
+                      color: AppColors.blackText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                )),
           ],
         ),
       ),

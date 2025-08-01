@@ -2,7 +2,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:workout_app/routing/router.dart';
 import 'package:authentication/src/authentication_module.dart';
 import 'package:authentication/src/presentation/pages/home/auth_home_view_model.dart';
 import 'package:wkout_core/wkout_core.dart';
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'Flutter App Demo',
         theme: AppTheme.light,
-        routerConfig: router,
+        routerConfig: WkoutRouter().createRouter(),
       ),
     );
   }

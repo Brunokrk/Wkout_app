@@ -25,3 +25,10 @@ export 'exceptions/wkout_data_exception.dart';
 
 // DTOs
 export 'data/dto/base_dto.dart';
+
+// Router
+export 'router/wkout_router.dart';
+export 'router/wkout_navigation_service.dart';
+
+// Re-export go_router types for modules
+export 'package:go_router/go_router.dart';
