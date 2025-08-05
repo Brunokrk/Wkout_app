@@ -75,10 +75,10 @@ class _AuthHomePageState extends State<AuthHomePage> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<AuthHomeViewModel>();
     return Scaffold(
-      //backgroundColor: viewModel.isRed ? Colors.red : Colors.black,
-      body: WkoutLoading<AuthHomeViewModel>(
-        child:
-            Consumer<AuthHomeViewModel>(builder: (context, viewModel, child) {
+      body: GradientBackground(
+                child: WkoutLoading<AuthHomeViewModel>(
+          child:
+              Consumer<AuthHomeViewModel>(builder: (context, viewModel, child) {
           return GestureDetector(
             onTap: () {
               // Fecha o teclado quando tocar fora dos campos
@@ -109,6 +109,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
             ),
           );
         }),
+      ),
       ),
     );
   }
@@ -192,7 +193,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
                 label: "Continuar",
                 onPressed: () {
                   WkoutNavigationService()
-                      .go(context, AuthRoutes.registerProfile);
+                      .push(context, AuthRoutes.registerProfile);
                   // viewModel.makeRegister(
                   //     name: _registerNameController.text,
                   //     email: _registerEmailController.text,

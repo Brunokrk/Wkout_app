@@ -7,6 +7,11 @@ class AppTypography {
     fontWeight: FontWeight.bold,
     color: AppColors.blackText,
   );
+  static const headline2 = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.blackText,
+  );
   static const bodyText1 = TextStyle(
     fontSize: 16,
     color: AppColors.blackText,
