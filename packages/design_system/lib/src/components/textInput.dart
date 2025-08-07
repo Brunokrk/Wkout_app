@@ -6,6 +6,7 @@ enum InputType {
   password,
   phone,
   name,
+  genericPrefixIcon,
 }
 
 class CustomTextInput extends StatelessWidget {
@@ -13,12 +14,14 @@ class CustomTextInput extends StatelessWidget {
  
   final TextEditingController controller;
   final InputType? inputType;
+  final IconData? prefixIcon;
 
   const CustomTextInput({
     required this.label,
    
     required this.controller,
     this.inputType,
+    this.prefixIcon,
     super.key,
   });
 
@@ -33,9 +36,23 @@ class CustomTextInput extends StatelessWidget {
         return _buildPhoneInput();
       case InputType.name:
         return _buildNameInput();
+      case InputType.genericPrefixIcon:
+        return _buildGenericPrefixIconInput();
       default:
         return _buildDefaultInput();
     }
+  }
+
+  Widget _buildGenericPrefixIconInput() {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        icon: Icon(prefixIcon),
+      ),
+    );
   }
 
   Widget _buildEmailInput() {

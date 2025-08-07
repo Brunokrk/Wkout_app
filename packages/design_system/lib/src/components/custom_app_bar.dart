@@ -26,34 +26,44 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: backgroundColor != null 
-            ? [backgroundColor!, backgroundColor!]
-            : [
-                AppColors.primary.withOpacity(0.9),
-                AppColors.secondary.withOpacity(0.7),
-              ],
-        ),
+        color: AppColors.primary,
       ),
       child: SafeArea(
         child: Container(
           height: kToolbarHeight,
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
+          child: Stack(
             children: [
+              // Botão de voltar (esquerda)
               if (showBackButton)
-                leading ?? 
-                IconButton(
-                  onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 24,
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: leading ??
+                      IconButton(
+                        onPressed:
+                            onBackPressed ?? () => Navigator.of(context).pop(),
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                ),
+              // Ações (direita)
+              if (actions != null)
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: actions!,
                   ),
                 ),
-              Expanded(
+              // Título centralizado
+              Center(
                 child: Text(
                   title,
                   style: AppTypography.headline1.copyWith(
@@ -63,7 +73,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              if (actions != null) ...actions!,
             ],
           ),
         ),
@@ -114,19 +123,38 @@ class RoundedAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Container(
           height: kToolbarHeight,
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
+          child: Stack(
             children: [
+              // Botão de voltar (esquerda)
               if (showBackButton)
-                leading ?? 
-                IconButton(
-                  onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 24,
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: leading ??
+                      IconButton(
+                        onPressed:
+                            onBackPressed ?? () => Navigator.of(context).pop(),
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                ),
+              // Ações (direita)
+              if (actions != null)
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: actions!,
                   ),
                 ),
-              Expanded(
+              // Título centralizado
+              Center(
                 child: Text(
                   title,
                   style: AppTypography.headline1.copyWith(
@@ -136,7 +164,6 @@ class RoundedAppBar extends StatelessWidget implements PreferredSizeWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              if (actions != null) ...actions!,
             ],
           ),
         ),
@@ -146,4 +173,4 @@ class RoundedAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-} 
+}

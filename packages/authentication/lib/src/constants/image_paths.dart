@@ -7,8 +7,7 @@ class AuthenticationImagePaths {
   static const String logoPNG = '$_basePath/png/logo.png';
 
   // Imagens PNG
-  static const String userIcon = '$_basePath/png/user_icon.png';
-  static const String backgroundImage = '$_basePath/png/background.png';
+  static const String genericAvatar = '$_basePath/png/generic_avatar.png';
 
   // Método para obter caminho completo
   static String getSvgPath(String fileName) => '$_basePath/svg/$fileName.svg';

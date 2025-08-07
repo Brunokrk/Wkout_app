@@ -622,4 +622,4 @@ void main() {
 
 **Última atualização:** Dezembro 2024  
 **Versão:** 1.0.0  
-**Autor:** Equipe Wkout 
+**Autor:** Bruno Marchi Pires
