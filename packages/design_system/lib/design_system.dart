@@ -12,3 +12,5 @@ export 'src/components/dateInput.dart';
 export 'src/components/gradient_background.dart';
 export 'src/components/custom_app_bar.dart';
 export 'src/components/custom_profile_image.dart';
+export 'src/components/info_tooltip.dart';
+export 'src/components/custom_chip.dart';
