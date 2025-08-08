@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wkout_core/wkout_core.dart';
+import 'package:provider/provider.dart';
 import '../presentation/pages/home/auth_home_page.dart';
 import '../presentation/pages/register/register_profile_page.dart';
+import '../presentation/pages/home/auth_home_view_model.dart';
+import '../presentation/pages/register/register_profile_view_model.dart';
 
 class AuthRoutes implements WkoutModuleRoutes {
   static const String home = '/';
@@ -11,11 +14,17 @@ class AuthRoutes implements WkoutModuleRoutes {
   List<RouteBase> get routes => [
         GoRoute(
           path: home,
-          builder: (context, state) => const AuthHomePage(),
+          builder: (context, state) => ChangeNotifierProvider<AuthHomeViewModel>(
+            create: (context) => WkoutInjector.I.get<AuthHomeViewModel>(),
+            child: const AuthHomePage(),
+          ),
         ),
         GoRoute(
           path: registerProfile,
-          builder: (context, state) => const RegisterProfilePage(),
+          builder: (context, state) => ChangeNotifierProvider<RegisterProfileViewModel>(
+            create: (context) => WkoutInjector.I.get<RegisterProfileViewModel>(),
+            child: const RegisterProfilePage(),
+          ),
         ),
       ];
 

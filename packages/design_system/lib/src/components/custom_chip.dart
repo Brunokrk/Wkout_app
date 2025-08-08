@@ -43,7 +43,7 @@ class _CustomChipState extends State<CustomChip> {
         padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: widget.isSelected 
-            ? (widget.selectedColor ?? AppColors.primary)
+            ? (widget.selectedColor ?? AppColors.secondary)
             : (widget.unselectedColor ?? Colors.transparent),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -78,7 +78,7 @@ class _CustomChipState extends State<CustomChip> {
               style: AppTypography.bodyText1.copyWith(
                 color: widget.isSelected 
                   ? (widget.selectedTextColor ?? Colors.white)
-                  : (widget.unselectedTextColor ?? AppColors.primary),
+                  : (widget.unselectedTextColor ?? AppColors.secondary),
                 fontWeight: widget.isSelected ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
@@ -110,7 +110,7 @@ class ActivityChip extends StatelessWidget {
       isSelected: isSelected,
       onTap: onTap,
       icon: icon,
-      selectedColor: AppColors.primary,
+      selectedColor: AppColors.secondary,
       unselectedColor: Colors.transparent,
       selectedTextColor: Colors.white,
       unselectedTextColor: AppColors.primary,
