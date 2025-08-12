@@ -45,6 +45,11 @@ class WkoutNavigationService {
     context.pop();
   }
 
+  /// Volta para uma rota específica com resultado
+  void popWithResult(BuildContext context, Object result) {
+    context.pop(result);
+  }
+
   /// Volta para uma rota específica
   void popTo(BuildContext context, String route) {
     context.pop();

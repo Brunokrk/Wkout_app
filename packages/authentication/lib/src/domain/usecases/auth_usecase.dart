@@ -78,21 +78,6 @@ class AuthUseCase extends WkoutBaseService {
     }
   }
 
-  /// Obtém usuário atual
-  Future<void> getCurrentUser() async {
-    try {
-      final user = await _repository.getCurrentUser();
-      
-      // Regras de negócio
-      if (user != null && !user.isValid) {
-        _currentUser = null; // Usuário inválido, tratar como não autenticado
-      } else {
-        _currentUser = user;
-      }
-    } catch (e) {
-      throw handleException(exception: e);
-    }
-  }
 
   /// Executa logout
   Future<void> logout() async {

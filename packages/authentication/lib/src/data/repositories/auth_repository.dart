@@ -60,21 +60,6 @@ class AuthRepository implements IAuthRepository {
     }
   }
 
-  /// Get Current User: Service retorna UserDto → Repository transforma em UserModel
-  @override
-  Future<UserModel> getCurrentUser() async {
-    try {
-      final userDto = await _authService.getCurrentUser();
-
-      if (userDto != null) {
-        return _mapUserDtoToModel(userDto);
-      }
-      throw Exception('Usuário não encontrado');
-    } catch (e) {
-      throw Exception('Erro ao obter usuário atual: $e');
-    }
-  }
-
   /// Logout: Service retorna void → Repository retorna void
   @override
   Future<void> logout() async {

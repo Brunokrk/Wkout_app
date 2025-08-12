@@ -5,6 +5,7 @@ import 'package:wkout_core/wkout_core.dart';
 import 'package:authentication/src/data/activities_data.dart';
 import 'package:provider/provider.dart';
 import 'register_profile_view_model.dart';
+import '../../widgets/profile_image_picker.dart';
 
 class RegisterProfilePage extends StatefulWidget {
   const RegisterProfilePage({super.key});
@@ -17,10 +18,6 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
   @override
   void initState() {
     super.initState();
-    // Carrega dados do usuário atual se existir
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<RegisterProfileViewModel>().loadCurrentUserData();
-    });
   }
 
   @override
@@ -57,15 +54,12 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CustomProfileImage(
-                                  showEditIcon: true,
-                                  onTap: () => viewModel.selectProfileImage(context),
+                                ProfileImagePicker(
                                   imageBytes: viewModel.selectedProfileImage,
-                                  imagePath: viewModel.selectedProfileImage == null 
-                                    ? AuthenticationImagePaths.genericAvatar 
-                                    : null,
+                                  placeholderImagePath: AuthenticationImagePaths.genericAvatar,
                                   borderColor: Colors.white,
                                   placeholderText: 'Adicionar foto',
+                                  onImageSelected: viewModel.setProfileImage,
                                 ),
                               ],
                             ),

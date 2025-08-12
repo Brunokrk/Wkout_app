@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:wkout_core/wkout_core.dart';
 import '../../../domain/usecases/auth_usecase.dart';
 import '../../../data/repositories/auth_repository.dart';
-import '../../../services/image_picker_service.dart';
 
 /// ViewModel que gerencia o estado da tela de registro de perfil
 class RegisterProfileViewModel extends WkoutBaseViewModel {
@@ -39,23 +38,10 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
           repository: AuthRepository(),
         );
 
-  /// Seleciona uma imagem de perfil
-  Future<void> selectProfileImage(BuildContext context) async {
-    try {
-      toggleScreenLoading();
-      clearScreenError();
-
-      final Uint8List? imageBytes = await ImagePickerService.showImageSourceDialog(context);
-      
-      if (imageBytes != null) {
-        selectedProfileImage = imageBytes;
-        notifyListeners();
-      }
-    } catch (e) {
-      setScreenErrorText('Erro ao selecionar imagem: $e');
-    } finally {
-      toggleScreenLoading();
-    }
+  /// Atualiza a imagem de perfil vinda da UI
+  void setProfileImage(Uint8List? imageBytes) {
+    selectedProfileImage = imageBytes;
+    notifyListeners();
   }
 
   /// Adiciona ou remove uma atividade da lista
@@ -114,30 +100,6 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
     notifyListeners();
   }
 
-  /// Obtém dados do usuário atual (se existir)
-  Future<void> loadCurrentUserData() async {
-    try {
-      toggleScreenLoading();
-      clearScreenError();
-
-      // Carrega dados do usuário atual se estiver logado
-      await _authUseCase.getCurrentUser();
-      
-      // Preenche os campos com dados existentes
-      final currentUser = _authUseCase.currentUser;
-      if (currentUser != null) {
-        userNameController.text = currentUser.name ?? '';
-        // phoneController.text = currentUser.phone ?? '';
-        // bioController.text = currentUser.bio ?? '';
-      }
-
-      notifyListeners();
-    } catch (e) {
-      setScreenErrorText('Erro ao carregar dados do usuário: $e');
-    } finally {
-      toggleScreenLoading();
-    }
-  }
 
   @override
   void dispose() {

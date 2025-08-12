@@ -7,7 +7,7 @@ abstract class IAuthRepository {
     required String password,
     required String name,
   });
-  Future<UserModel> getCurrentUser();
+  
   Future<void> logout();
   Future<UserModel> updateUser({required UserModel user});
 }

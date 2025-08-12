@@ -83,22 +83,6 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
     notifyListeners();
   }
 
-  /// Obtém usuário atual usando a AuthUseCase
-  Future<void> getCurrentUser() async {
-    try {
-      toggleScreenLoading();
-      clearScreenError();
-
-      // AuthUseCase executa todas as regras de negócio
-      await _authUseCase.getCurrentUser();
-
-      notifyListeners();
-    } catch (e) {
-      setScreenErrorText(e.toString());
-    } finally {
-      toggleScreenLoading();
-    }
-  }
 
   /// Executa logout usando a AuthUseCase
   Future<void> logout() async {

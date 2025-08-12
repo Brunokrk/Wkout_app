@@ -18,6 +18,8 @@ class CustomTextInput extends StatefulWidget {
   final IconData? prefixIcon;
   final bool? haveInformation;
   final String? information;
+  final String? Function(String?)? validator;
+  final AutovalidateMode? autovalidateMode;
 
   const CustomTextInput({
     required this.label,
@@ -26,6 +28,8 @@ class CustomTextInput extends StatefulWidget {
     this.prefixIcon,
     this.haveInformation,
     this.information,
+    this.validator,
+    this.autovalidateMode,
     super.key,
   });
 
@@ -59,6 +63,8 @@ class _CustomTextInputState extends State<CustomTextInput> {
   Widget _buildGenericPrefixIconInput() {
     return TextFormField(
       controller: widget.controller,
+      validator: widget.validator,
+      autovalidateMode: widget.autovalidateMode,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: widget.label,
@@ -77,6 +83,8 @@ class _CustomTextInputState extends State<CustomTextInput> {
   Widget _buildEmailInput() {
     return TextFormField(
       controller: widget.controller,
+      validator: widget.validator,
+      autovalidateMode: widget.autovalidateMode,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: widget.label,
@@ -84,7 +92,9 @@ class _CustomTextInputState extends State<CustomTextInput> {
         icon: Icon(Icons.email),
         fillColor: AppColors.backgroundLight,
         filled: true,
-        constraints: BoxConstraints(minHeight: 40, maxHeight: 40),
+        constraints: (widget.validator != null || widget.autovalidateMode != null)
+            ? null
+            : BoxConstraints(minHeight: 40, maxHeight: 40),
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         suffixIcon: widget.haveInformation == true
             ? InfoTooltip(
@@ -99,6 +109,9 @@ class _CustomTextInputState extends State<CustomTextInput> {
   Widget _buildPasswordInput() {
     return TextFormField(
       controller: widget.controller,
+      validator: widget.validator,
+      autovalidateMode: widget.autovalidateMode,
+      obscureText: true,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: widget.label,
@@ -106,7 +119,9 @@ class _CustomTextInputState extends State<CustomTextInput> {
         icon: Icon(Icons.password),
         fillColor: AppColors.backgroundLight,
         filled: true,
-        constraints: BoxConstraints(maxHeight: 40),
+        constraints: (widget.validator != null || widget.autovalidateMode != null)
+            ? null
+            : BoxConstraints(maxHeight: 40),
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         suffixIcon: widget.haveInformation == true
             ? InfoTooltip(
@@ -121,13 +136,17 @@ class _CustomTextInputState extends State<CustomTextInput> {
   Widget _buildDefaultInput() {
     return TextFormField(
       controller: widget.controller,
+      validator: widget.validator,
+      autovalidateMode: widget.autovalidateMode,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: widget.label,
         floatingLabelBehavior: FloatingLabelBehavior.never,
         fillColor: AppColors.backgroundLight,
         filled: true,
-        constraints: BoxConstraints(maxHeight: 40),
+        constraints: (widget.validator != null || widget.autovalidateMode != null)
+            ? null
+            : BoxConstraints(maxHeight: 40),
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       ),
     );
@@ -136,6 +155,8 @@ class _CustomTextInputState extends State<CustomTextInput> {
   Widget _buildPhoneInput() {
     return TextFormField(
       controller: widget.controller,
+      validator: widget.validator,
+      autovalidateMode: widget.autovalidateMode,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -159,6 +180,9 @@ class _CustomTextInputState extends State<CustomTextInput> {
   Widget _buildNameInput() {
     return TextFormField(
       controller: widget.controller,
+      validator: widget.validator,
+      autovalidateMode: widget.autovalidateMode,
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: widget.label,
@@ -166,7 +190,9 @@ class _CustomTextInputState extends State<CustomTextInput> {
         icon: Icon(Icons.person),
         fillColor: AppColors.backgroundLight,
         filled: true,
-        constraints: BoxConstraints(maxHeight: 40),
+        constraints: (widget.validator != null || widget.autovalidateMode != null)
+            ? null
+            : BoxConstraints(maxHeight: 40),
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         suffixIcon: widget.haveInformation == true
             ? InfoTooltip(
@@ -181,6 +207,8 @@ class _CustomTextInputState extends State<CustomTextInput> {
   Widget _buildLargeTextInput() {
     return TextFormField(
       controller: widget.controller,
+      validator: widget.validator,
+      autovalidateMode: widget.autovalidateMode,
       maxLines: 4,
       minLines: 3,
       keyboardType: TextInputType.multiline,

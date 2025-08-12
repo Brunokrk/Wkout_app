@@ -13,7 +13,7 @@ class AuthenticationModule extends WkoutModule<AuthenticationModule> {
     WkoutInjector.I
         .registerSingleton<AuthHomeViewModel>(() => AuthHomeViewModel());
     WkoutInjector.I
-        .registerSingleton<RegisterProfileViewModel>(() => RegisterProfileViewModel());
+        .registerFactory<RegisterProfileViewModel>(() => RegisterProfileViewModel());
 
     // Registrar rotas do módulo
     WkoutRouter().registerRoutes(AuthRoutes().routes);

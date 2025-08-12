@@ -32,3 +32,6 @@ export 'router/wkout_navigation_service.dart';
 
 // Re-export go_router types for modules
 export 'package:go_router/go_router.dart';
+
+// Utils
+export 'utils/validators.dart';

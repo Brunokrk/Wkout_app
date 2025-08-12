@@ -61,19 +61,6 @@ class AuthService extends WkoutBaseService {
     }
   }
 
-  /// Obtém dados do usuário atual
-  Future<UserDto?> getCurrentUser() async {
-    try {
-      final user = _client.currentUser;
-      if (user != null) {
-        return UserDto.fromSupabaseUser(user);
-      }
-      return null;
-    } catch (e) {
-      throw handleException(exception: e);
-    }
-  }
-
   /// Realiza logout do usuário
   Future<void> logout() async {
     try {

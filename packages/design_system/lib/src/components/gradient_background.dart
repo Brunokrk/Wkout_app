@@ -36,14 +36,16 @@ class GradientBackground extends StatelessWidget {
   }
 }
 
-class GradientBackgroundWidget extends StatelessWidget {
+class SolidBackgroundWidget extends StatelessWidget {
   final Widget child;
+  final Color? color;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
 
-  const GradientBackgroundWidget({
+  const SolidBackgroundWidget({
     super.key,
     required this.child,
+    this.color,
     this.padding,
     this.margin,
   });
@@ -53,16 +55,8 @@ class GradientBackgroundWidget extends StatelessWidget {
     return Container(
       margin: margin,
       padding: padding,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.primary,
-            AppColors.secondary,
-          ],
-          stops: [0.0, 1.0],
-        ),
+      decoration: BoxDecoration(
+        color: color,
       ),
       child: child,
     );

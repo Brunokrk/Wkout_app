@@ -26,8 +26,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
   late TextEditingController _registerEmailController;
   late TextEditingController _registerPasswordController;
   late TextEditingController _registerAgeController;
-  late TextEditingController _registerNicknameController;
-
+  late TextEditingController _registerConfirmPasswordController;
   @override
   void initState() {
     _scrollController = ScrollController()
@@ -42,8 +41,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
     _registerEmailController = TextEditingController();
     _registerPasswordController = TextEditingController();
     _registerAgeController = TextEditingController();
-    _registerNicknameController = TextEditingController();
-
+    _registerConfirmPasswordController = TextEditingController();
     super.initState();
   }
 
@@ -56,6 +54,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
     _registerEmailController.dispose();
     _registerPasswordController.dispose();
     _registerAgeController.dispose();
+    _registerConfirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -73,43 +72,49 @@ class _AuthHomePageState extends State<AuthHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<AuthHomeViewModel>();
-    return Scaffold(
-      body: GradientBackground(
-                child: WkoutLoading<AuthHomeViewModel>(
-          child:
-              Consumer<AuthHomeViewModel>(builder: (context, viewModel, child) {
-          return GestureDetector(
-            onTap: () {
-              // Fecha o teclado quando tocar fora dos campos
-              FocusScope.of(context).unfocus();
-            },
-            child: CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        AuthImageWidget(
-                          imagePath: AuthenticationImagePaths.logoPNG,
-                          width: 300,
+    return SafeArea(
+      child: Scaffold(
+      body: SolidBackgroundWidget(
+        color: AppColors.backgroundLight,
+        child: WkoutLoading<AuthHomeViewModel>(
+          child: Consumer<AuthHomeViewModel>(
+            builder: (context, viewModel, child) {
+              return GestureDetector(
+                onTap: () {
+                  // Fecha o teclado quando tocar fora dos campos
+                  FocusScope.of(context).unfocus();
+                },
+                child:
+                CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Center(
+                        child: Column(
+                          children: [
+                            AuthImageWidget(
+                              imagePath: AuthenticationImagePaths.logoPNG,
+                              width: 150,
+                            ),
+                            if (viewModel.authStep == AuthSteps.initial)
+                              _buildAuthOptions(viewModel),
+                            if (viewModel.authStep == AuthSteps.login)
+                              _buildLoginForm(viewModel),
+                            if (viewModel.authStep == AuthSteps.register)
+                              _buildRegisterForm(viewModel),
+                            Spacing.vertical(16),
+                          ],
                         ),
-                        if (viewModel.authStep == AuthSteps.initial)
-                          _buildAuthOptions(viewModel),
-                        if (viewModel.authStep == AuthSteps.login)
-                          _buildLoginForm(viewModel),
-                        if (viewModel.authStep == AuthSteps.register)
-                          _buildRegisterForm(viewModel),
-                      ],
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          );
-        }),
-      ),
+                    
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        ),
       ),
     );
   }
@@ -164,6 +169,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
   }
 
   Widget _buildRegisterForm(AuthHomeViewModel viewModel) {
+    final formKey = GlobalKey<FormState>();
     return Container(
       width: 340,
       decoration: BoxDecoration(
@@ -172,28 +178,43 @@ class _AuthHomePageState extends State<AuthHomePage> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
+        child: Form(
+          key: formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Column(
+            children: [
             CustomTextInput(
                 label: "Nome completo",
                 controller: _registerNameController,
-                inputType: InputType.name),
+                  inputType: InputType.name,
+                  validator: Validators.fullName()),
             Spacing.vertical(16),
             CustomTextInput(
                 label: "Email",
                 inputType: InputType.email,
-                controller: _registerEmailController),
+                  controller: _registerEmailController,
+                  validator: Validators.email()),
             Spacing.vertical(16),
             CustomTextInput(
                 label: "Senha",
                 controller: _registerPasswordController,
-                inputType: InputType.password),
+                  inputType: InputType.password,
+                  validator: Validators.password()),
+            Spacing.vertical(16),
+            CustomTextInput(
+                label: "Confirmar senha",
+                controller: _registerConfirmPasswordController,
+                  inputType: InputType.password,
+                  validator: Validators.password()),
+                  
             Spacing.vertical(16),
             AppButton(
                 label: "Continuar",
                 onPressed: () {
-                  WkoutNavigationService()
-                      .push(context, AuthRoutes.registerProfile);
+                    if (formKey.currentState?.validate() == true) {
+                      WkoutNavigationService()
+                          .push(context, AuthRoutes.registerProfile);
+                    }
                   // viewModel.makeRegister(
                   //     name: _registerNameController.text,
                   //     email: _registerEmailController.text,
@@ -213,6 +234,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
                 )),
           ],
         ),
+      ),
       ),
     );
   }
