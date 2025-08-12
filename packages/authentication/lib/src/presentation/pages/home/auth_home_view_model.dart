@@ -6,28 +6,24 @@ import '../../../domain/usecases/auth_usecase.dart';
 import '../../../data/repositories/auth_repository.dart';
 
 /// ViewModel que gerencia o estado da tela de autenticação
-/// Usa uma única AuthUseCase para todas as operações
 class AuthHomeViewModel extends WkoutBaseViewModel {
-  final AuthUseCase _authUseCase;
+  final AuthUseCase authUseCase;
   AuthSteps authStep = AuthSteps.initial;
 
-  AuthHomeViewModel({AuthUseCase? authUseCase})
-      : _authUseCase = authUseCase ?? AuthUseCase(
-          repository: AuthRepository(),
-        );
+  AuthHomeViewModel({required this.authUseCase});
 
-  UserModel? get user => _authUseCase.currentUser;
+  UserModel? get user => authUseCase.currentUser;
 
-  bool get isRed => _authUseCase.isRed;
+  bool get isRed => authUseCase.isRed;
 
-  bool get isAuthenticated => _authUseCase.isAuthenticated;
+  bool get isAuthenticated => authUseCase.isAuthenticated;
 
-  String get displayName => _authUseCase.displayName;
+  String get displayName => authUseCase.displayName;
 
-  bool get hasName => _authUseCase.hasName;
+  bool get hasName => authUseCase.hasName;
 
   void toggleRed() {
-    _authUseCase.isRed = !_authUseCase.isRed;
+    authUseCase.isRed = !authUseCase.isRed;
     notifyListeners();
   }
 
@@ -37,7 +33,7 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
       clearScreenError();
 
       // AuthUseCase executa todas as regras de negócio
-      await _authUseCase.login(
+      await authUseCase.login(
         email: email,
         password: password,
       );
@@ -61,8 +57,7 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
       toggleScreenLoading();
       clearScreenError();
 
-      // AuthUseCase executa todas as regras de negócio
-      await _authUseCase.register(
+      await authUseCase.register(
         email: email,
         password: password,
         name: name,
@@ -91,7 +86,7 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
       clearScreenError();
 
       // AuthUseCase executa todas as regras de negócio
-      await _authUseCase.logout();
+      await authUseCase.logout();
 
       notifyListeners();
     } catch (e) {
@@ -112,7 +107,7 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
       clearScreenError();
 
       // AuthUseCase executa todas as regras de negócio
-      await _authUseCase.updateUser(
+      await authUseCase.updateUser(
         name: name,
         age: age,
       );
@@ -123,5 +118,11 @@ class AuthHomeViewModel extends WkoutBaseViewModel {
     } finally {
       toggleScreenLoading();
     }
+  }
+
+  @override
+  void dispose() {
+    // Garantir que o ViewModel seja descartado corretamente
+    super.dispose();
   }
 }

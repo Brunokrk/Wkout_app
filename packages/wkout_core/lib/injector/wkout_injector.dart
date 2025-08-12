@@ -23,6 +23,12 @@ class WkoutInjector {
     }
   }
 
+  void registerLazySingleton<T extends Object>(FactoryFunc<T> factoryFunc, {String? instanceName}){
+    if(!_getIt.isRegistered<T>()) {
+      _getIt.registerLazySingleton(factoryFunc, instanceName: instanceName);
+    }
+  }
+
   T get<T extends Object>({String? instanceName}) {
     return _getIt.get<T>(instanceName: instanceName);
   }

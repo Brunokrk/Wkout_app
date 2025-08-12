@@ -1,12 +1,14 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:wkout_core/injector/wkout_injector.dart';
 import 'package:wkout_core/wkout_core.dart';
+import '../../../data/data_source/auth_service.dart';
 import '../../../domain/usecases/auth_usecase.dart';
 import '../../../data/repositories/auth_repository.dart';
 
 /// ViewModel que gerencia o estado da tela de registro de perfil
 class RegisterProfileViewModel extends WkoutBaseViewModel {
-  final AuthUseCase _authUseCase;
+  final AuthUseCase authUseCase;
   
   // Controllers para os campos de texto
   final TextEditingController userNameController = TextEditingController();
@@ -34,8 +36,8 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
   }
 
   RegisterProfileViewModel({AuthUseCase? authUseCase})
-      : _authUseCase = authUseCase ?? AuthUseCase(
-          repository: AuthRepository(),
+      : authUseCase = authUseCase ?? AuthUseCase(
+          repository: AuthRepository(authService: WkoutInjector.I.get<AuthService>()),
         );
 
   /// Atualiza a imagem de perfil vinda da UI
@@ -76,7 +78,7 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
       await Future.delayed(const Duration(seconds: 2));
 
       // Exemplo de uso do AuthUseCase para atualizar o usuário
-      await _authUseCase.updateUser(
+      await authUseCase.updateUser(
         name: userNameController.text.trim(),
         // age: int.tryParse(ageController.text),
       );

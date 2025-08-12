@@ -14,20 +14,27 @@ class WkoutLoading<T extends WkoutBaseViewModel> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<T>(builder: (context, viewModel, child) {
-      
-      return Stack(
-        children: [
-          IgnorePointer(
-            ignoring: viewModel.screenLoading,
-            child: child,
-          ),
-          Visibility(
-            visible: viewModel.screenLoading,
-            child: loadingWidget ??  Center(child: CircularProgressIndicator()),
-          ),
-        ],
-      );
-    }, child: child);
+    return Consumer<T>(
+      builder: (context, viewModel, child) {
+        // Verificar se o ViewModel ainda está válido
+        if (viewModel == null) {
+          return child ?? const SizedBox.shrink();
+        }
+        
+        return Stack(
+          children: [
+            IgnorePointer(
+              ignoring: viewModel.screenLoading,
+              child: child,
+            ),
+            Visibility(
+              visible: viewModel.screenLoading,
+              child: loadingWidget ?? const Center(child: CircularProgressIndicator()),
+            ),
+          ],
+        );
+      },
+      child: child,
+    );
   }
 }

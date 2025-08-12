@@ -7,10 +7,9 @@ import '../../domain/models/user_model.dart';
 
 /// Repository que transforma DTOs em Models
 class AuthRepository implements IAuthRepository {
-  final AuthService _authService;
+  final AuthService authService;
 
-  AuthRepository({AuthService? authService})
-      : _authService = authService ?? AuthService();
+  AuthRepository({required this.authService});
 
   /// Transforma UserDto em UserModel
   UserModel _mapUserDtoToModel(UserDto dto) {
@@ -29,7 +28,7 @@ class AuthRepository implements IAuthRepository {
   Future<UserModel> login(
       {required String email, required String password}) async {
     try {
-      final userDto = await _authService.login(
+      final userDto = await authService.login(
         email: email,
         password: password,
       );
@@ -48,7 +47,7 @@ class AuthRepository implements IAuthRepository {
     required String name,
   }) async {
     try {
-      final userDto = await _authService.register(
+      final userDto = await authService.register(
         email: email,
         password: password,
         name: name,
@@ -64,13 +63,12 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<void> logout() async {
     try {
-      await _authService.logout();
+      await authService.logout();
     } catch (e) {
       throw Exception('Erro no logout: $e');
     }
   }
 
-  /// Update User: Service retorna UserDto → Repository transforma em UserModel
   @override
   Future<UserModel> updateUser({required UserModel user}) async {
     try {
@@ -84,7 +82,7 @@ class AuthRepository implements IAuthRepository {
         updatedAt: user.updatedAt,
       );
 
-      final updatedUserDto = await _authService.updateUser(user: userDto);
+      final updatedUserDto = await authService.updateUser(user: userDto);
 
       return _mapUserDtoToModel(updatedUserDto);
     } catch (e) {

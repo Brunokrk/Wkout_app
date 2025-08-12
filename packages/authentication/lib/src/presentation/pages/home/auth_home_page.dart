@@ -76,45 +76,46 @@ class _AuthHomePageState extends State<AuthHomePage> {
       child: Scaffold(
       body: SolidBackgroundWidget(
         color: AppColors.backgroundLight,
-        child: WkoutLoading<AuthHomeViewModel>(
-          child: Consumer<AuthHomeViewModel>(
-            builder: (context, viewModel, child) {
-              return GestureDetector(
-                onTap: () {
-                  // Fecha o teclado quando tocar fora dos campos
-                  FocusScope.of(context).unfocus();
-                },
-                child:
-                CustomScrollView(
-                  controller: _scrollController,
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Center(
-                        child: Column(
-                          children: [
-                            AuthImageWidget(
-                              imagePath: AuthenticationImagePaths.logoPNG,
-                              width: 150,
-                            ),
-                            if (viewModel.authStep == AuthSteps.initial)
-                              _buildAuthOptions(viewModel),
-                            if (viewModel.authStep == AuthSteps.login)
-                              _buildLoginForm(viewModel),
-                            if (viewModel.authStep == AuthSteps.register)
-                              _buildRegisterForm(viewModel),
-                            Spacing.vertical(16),
-                          ],
-                        ),
+        child: Consumer<AuthHomeViewModel>(
+          builder: (context, viewModel, child) {
+            return GestureDetector(
+              onTap: () {
+                // Fecha o teclado quando tocar fora dos campos
+                FocusScope.of(context).unfocus();
+              },
+              child:
+              CustomScrollView(
+                
+                controller: _scrollController,
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          AuthImageWidget(
+                            imagePath: AuthenticationImagePaths.logoPNG,
+                            width: 150,
+                          ),
+                          if (viewModel.authStep == AuthSteps.initial)
+                            _buildAuthOptions(viewModel),
+                          if (viewModel.authStep == AuthSteps.register)
+                            _buildRegisterForm(viewModel),
+                          if (viewModel.authStep == AuthSteps.login)
+                            _buildLoginForm(viewModel),
+                          Spacing.vertical(16),
+                        ],
                       ),
                     ),
-                    
-                  ],
-                ),
-              );
-            },
-          ),
+                  ),
+                  
+                ],
+              ),
+            );
+          },
         ),
-        ),
+      ),
       ),
     );
   }

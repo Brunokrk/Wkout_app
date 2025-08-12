@@ -30,8 +30,7 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
         },
       ),
       backgroundColor: AppColors.primary,
-      body: WkoutLoading<RegisterProfileViewModel>(
-        child: Consumer<RegisterProfileViewModel>(
+      body: Consumer<RegisterProfileViewModel>(
           builder: (context, viewModel, child) {
             return Column(
               children: [
@@ -147,9 +146,8 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
                   ),
                 ),
               ],
-            );
-          },
-        ),
+          );
+        },
       ),
     );
   }

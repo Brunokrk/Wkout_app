@@ -1,13 +1,13 @@
+import 'package:authentication/authentication.dart';
 import 'package:wkout_core/wkout_core.dart';
 
 import '../models/user_model.dart';
 import '../../data/repositories/auth_repository.dart';
 
 class AuthUseCase extends WkoutBaseService {
-  final AuthRepository _repository;
+  final IAuthRepository repository;
 
-  AuthUseCase({required AuthRepository repository})
-      : _repository = repository;
+    AuthUseCase({required this.repository});
 
   // Estado do usuário
   UserModel? _currentUser;
@@ -30,7 +30,7 @@ class AuthUseCase extends WkoutBaseService {
       _validateLoginData(email: email, password: password);
 
       // Executar login via repository
-      final user = await _repository.login(
+      final user = await repository.login(
         email: email.trim(),
         password: password,
       );
@@ -62,7 +62,7 @@ class AuthUseCase extends WkoutBaseService {
       );
 
       // Executar registro via repository
-      final user = await _repository.register(
+      final user = await repository.register(
         email: email.trim(),
         password: password,
         name: name.trim(),
@@ -82,7 +82,7 @@ class AuthUseCase extends WkoutBaseService {
   /// Executa logout
   Future<void> logout() async {
     try {
-      await _repository.logout();
+      await repository.logout();
       _currentUser = null; // Limpar estado
     } catch (e) {
       throw handleException(exception: e);
@@ -109,7 +109,7 @@ class AuthUseCase extends WkoutBaseService {
       );
 
       // Executar atualização via repository
-      final user = await _repository.updateUser(user: updatedUser);
+      final user = await repository.updateUser(user: updatedUser);
       
       // Regras de negócio pós-atualização
       _validateUserAfterUpdate(user);
