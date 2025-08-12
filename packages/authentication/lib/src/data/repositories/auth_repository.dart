@@ -59,7 +59,6 @@ class AuthRepository implements IAuthRepository {
     }
   }
 
-  /// Logout: Service retorna void → Repository retorna void
   @override
   Future<void> logout() async {
     try {
