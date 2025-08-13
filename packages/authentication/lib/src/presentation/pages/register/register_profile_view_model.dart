@@ -5,12 +5,13 @@ import 'package:wkout_core/wkout_core.dart';
 import '../../../data/data_source/auth_service.dart';
 import '../../../domain/usecases/auth_usecase.dart';
 import '../../../data/repositories/auth_repository.dart';
+import '../../parameters/register_profile_parameters.dart';
 
 /// ViewModel que gerencia o estado da tela de registro de perfil
 class RegisterProfileViewModel extends WkoutBaseViewModel {
   final AuthUseCase authUseCase;
+  final RegisterProfileParameters? parameters;
   
-  // Controllers para os campos de texto
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
@@ -34,11 +35,21 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
   bool isActivitySelected(String activityName) {
     return selectedActivities.contains(activityName);
   }
+  
+  // Getter para acessar os dados dos parâmetros
+  String get email => parameters?.email ?? '';
+  String get password => parameters?.password ?? '';
+  String get name => parameters?.name ?? '';
+  String get phone => parameters?.phone ?? '';
+  String get birthDate => parameters?.birthDate ?? '';
 
-  RegisterProfileViewModel({AuthUseCase? authUseCase})
-      : authUseCase = authUseCase ?? AuthUseCase(
+  RegisterProfileViewModel({
+    AuthUseCase? authUseCase,
+    this.parameters,
+  }) : authUseCase = authUseCase ?? AuthUseCase(
           repository: AuthRepository(authService: WkoutInjector.I.get<AuthService>()),
-        );
+        ) ;
+
 
   /// Atualiza a imagem de perfil vinda da UI
   void setProfileImage(Uint8List? imageBytes) {
@@ -46,7 +57,7 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
     notifyListeners();
   }
 
-  /// Adiciona ou remove uma atividade da lista
+  /// muda status de um chip
   void toggleActivity(String activityName) {
     if (selectedActivities.contains(activityName)) {
       selectedActivities.remove(activityName);
@@ -56,13 +67,12 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
     notifyListeners();
   }
 
-  /// Limpa a imagem de perfil selecionada
   void clearProfileImage() {
     selectedProfileImage = null;
     notifyListeners();
   }
 
-  /// Valida e envia o formulário de registro
+
   Future<void> submitRegistration() async {
     try {
       if (!isFormValid) {
@@ -70,19 +80,16 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
         return;
       }
 
+      if (parameters == null) {
+        setScreenErrorText('Parâmetros de registro não encontrados.');
+        return;
+      }
+
       toggleScreenLoading();
       clearScreenError();
 
-      // Aqui você pode implementar a lógica de envio para o backend
-      // Por enquanto, vamos simular um delay
-      await Future.delayed(const Duration(seconds: 2));
-
-      // Exemplo de uso do AuthUseCase para atualizar o usuário
-      await authUseCase.updateUser(
-        name: userNameController.text.trim(),
-        // age: int.tryParse(ageController.text),
-      );
-
+      /// TO-DO: Envio backend
+      
       notifyListeners();
     } catch (e) {
       setScreenErrorText('Erro ao cadastrar perfil: $e');

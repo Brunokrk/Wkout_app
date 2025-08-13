@@ -2,19 +2,20 @@ import 'dart:convert';
 import 'package:wkout_core/wkout_core.dart';
 
 class RegisterProfileParameters extends WkoutBaseParameters {
-  final String email;
-  final String password;
-  final String name;
-  final String phone;
-  final String birthDate;
+  final String? email;
+  final String? password;
+  final String? name;
+  final String? phone;
+  final String? birthDate;
 
   RegisterProfileParameters({
-    required this.email,
-    required this.password,
-    required this.name,
-    required this.phone,
-    required this.birthDate,
+    this.email,
+    this.password,
+    this.name,
+    this.phone,
+    this.birthDate,
   });
+  
 
   @override
   String toExtra() {
@@ -41,11 +42,11 @@ class RegisterProfileParameters extends WkoutBaseParameters {
 
   @override
   bool get isValid {
-    return email.isNotEmpty &&
-           password.isNotEmpty &&
-           name.isNotEmpty &&
-           phone.isNotEmpty &&
-           birthDate.isNotEmpty;
+    return (email?.isNotEmpty ?? false) &&
+           (password?.isNotEmpty ?? false) &&
+           (name?.isNotEmpty ?? false) &&
+           (phone?.isNotEmpty ?? false) &&
+           (birthDate?.isNotEmpty ?? false);  
   }
 
   @override

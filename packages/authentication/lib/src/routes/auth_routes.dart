@@ -9,6 +9,7 @@ import '../presentation/pages/home/auth_home_page.dart';
 import '../presentation/pages/register/register_profile_page.dart';
 import '../presentation/pages/home/auth_home_view_model.dart';
 import '../presentation/pages/register/register_profile_view_model.dart';
+import '../presentation/parameters/register_profile_parameters.dart';
 
 class AuthRoutes implements WkoutModuleRoutes {
   static const String home = '/';
@@ -35,12 +36,17 @@ class AuthRoutes implements WkoutModuleRoutes {
         ),
         GoRoute(
           path: registerProfile,
-          builder: (context, state) =>
-              ChangeNotifierProvider<RegisterProfileViewModel>(
-            create: (context) => RegisterProfileViewModel(
-                authUseCase: WkoutInjector.I.get<AuthUseCase>()),
-            child: const RegisterProfilePage(),
-          ),
+          builder: (_, state) {
+            
+            return ChangeNotifierProvider<RegisterProfileViewModel>(
+              create: (_) => RegisterProfileViewModel(
+                authUseCase: WkoutInjector.I.get<AuthUseCase>(),
+              ),
+              child: RegisterProfilePage(
+                registerProfileParameters: RegisterProfileParameters().fromExtra(state.extra),
+              ),
+            );
+          },
         ),
       ];
 

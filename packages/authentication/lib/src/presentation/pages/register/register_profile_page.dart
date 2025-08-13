@@ -1,4 +1,5 @@
 import 'package:authentication/authentication.dart';
+import 'package:authentication/src/presentation/parameters/register_profile_parameters.dart';
 import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 import 'package:wkout_core/wkout_core.dart';
@@ -8,8 +9,8 @@ import 'register_profile_view_model.dart';
 import '../../widgets/profile_image_picker.dart';
 
 class RegisterProfilePage extends StatefulWidget {
-  const RegisterProfilePage({super.key});
-
+  const RegisterProfilePage({super.key, required this.registerProfileParameters});
+  final RegisterProfileParameters registerProfileParameters;
   @override
   State<RegisterProfilePage> createState() => _RegisterProfilePageState();
 }
@@ -18,6 +19,7 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
   @override
   void initState() {
     super.initState();
+    debugPrint('RegisterProfilePage: ${widget.registerProfileParameters.toString()}');
   }
 
   @override

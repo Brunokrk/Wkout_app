@@ -20,20 +20,86 @@ class RegisterPasswordViewModel extends WkoutBaseViewModel {
 
   late RegisterProfileParameters registrationParameters;
 
-  bool get isFormValid {
-    return emailController.text.trim().isNotEmpty &&
-           passwordController.text.trim().isNotEmpty &&
-           confirmPasswordController.text.trim().isNotEmpty &&
-           nameController.text.trim().isNotEmpty &&
-           phoneController.text.trim().isNotEmpty &&
-           birthDateController.text.trim().isNotEmpty &&
-           passwordController.text == confirmPasswordController.text;
-  }
-  
   RegisterPasswordViewModel({AuthUseCase? authUseCase})
       : authUseCase = authUseCase ?? AuthUseCase(
           repository: AuthRepository(authService: WkoutInjector.I.get<AuthService>()),
-        );
+        ) {
+    // Adicionar listeners para atualizar o estado quando os campos mudarem
+    emailController.addListener(_onFieldChanged);
+    passwordController.addListener(_onFieldChanged);
+    confirmPasswordController.addListener(_onFieldChanged);
+    nameController.addListener(_onFieldChanged);
+    phoneController.addListener(_onFieldChanged);
+    birthDateController.addListener(_onFieldChanged);
+  }
+
+  void _onFieldChanged() {
+    notifyListeners();
+  }
+
+  bool get isFormValid {
+    return _validateEmail() == null &&
+           _validatePassword() == null &&
+           _validateConfirmPassword() == null &&
+           _validateName() == null &&
+           _validatePhone() == null &&
+           _validateBirthDate() == null;
+  }
+
+  String? _validateEmail() {
+    return Validators.email()(emailController.text);
+  }
+
+  String? _validatePassword() {
+    return Validators.password()(passwordController.text);
+  }
+
+  String? _validateConfirmPassword() {
+    if (confirmPasswordController.text.isEmpty) {
+      return 'Confirme sua senha';
+    }
+    if (confirmPasswordController.text != passwordController.text) {
+      return 'As senhas não coincidem';
+    }
+    return null;
+  }
+
+  String? _validateName() {
+    return Validators.fullName()(nameController.text);
+  }
+
+  String? _validatePhone() {
+    return Validators.required(message: 'Informe seu número de telefone')(phoneController.text);
+  }
+
+  String? _validateBirthDate() {
+    return Validators.birthDate()(birthDateController.text);
+  }
+
+  /// Valida todos os campos e retorna uma lista de erros
+  List<String> validateAllFields() {
+    final errors = <String>[];
+    
+    final emailError = _validateEmail();
+    if (emailError != null) errors.add(emailError);
+    
+    final passwordError = _validatePassword();
+    if (passwordError != null) errors.add(passwordError);
+    
+    final confirmPasswordError = _validateConfirmPassword();
+    if (confirmPasswordError != null) errors.add(confirmPasswordError);
+    
+    final nameError = _validateName();
+    if (nameError != null) errors.add(nameError);
+    
+    final phoneError = _validatePhone();
+    if (phoneError != null) errors.add(phoneError);
+    
+    final birthDateError = _validateBirthDate();
+    if (birthDateError != null) errors.add(birthDateError);
+    
+    return errors;
+  }
 
   /// Limpa todos os campos do formulário
   void clearForm() {
@@ -65,6 +131,13 @@ class RegisterPasswordViewModel extends WkoutBaseViewModel {
 
   @override
   void dispose() {
+    emailController.removeListener(_onFieldChanged);
+    passwordController.removeListener(_onFieldChanged);
+    confirmPasswordController.removeListener(_onFieldChanged);
+    nameController.removeListener(_onFieldChanged);
+    phoneController.removeListener(_onFieldChanged);
+    birthDateController.removeListener(_onFieldChanged);
+    
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();

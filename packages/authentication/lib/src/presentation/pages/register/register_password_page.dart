@@ -16,24 +16,6 @@ class RegisterPasswordPage extends StatefulWidget {
 }
 
 class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
-  late TextEditingController emailController;
-  late TextEditingController passwordController;
-  late TextEditingController confirmPasswordController;
-  late TextEditingController nameController;
-  late TextEditingController phoneController;
-  late TextEditingController birthDateController;
-
-  @override
-  void initState() {
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
-    nameController = TextEditingController();
-    phoneController = TextEditingController();
-    birthDateController = TextEditingController();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -68,17 +50,17 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                               child: Column(
                                 children: [
                                   Spacing.vertical(10),
-                                                                     Align(
-                                     alignment: Alignment.centerLeft,
-                                     child: Text(
-                                       'Defina suas credenciais:',
-                                       style: AppTypography.bodyText1,
-                                     ),
-                                   ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Defina suas credenciais:',
+                                      style: AppTypography.bodyText1,
+                                    ),
+                                  ),
                                   Spacing.vertical(30),
                                   CustomTextInput(
                                     label: 'E-mail',
-                                    controller: emailController,
+                                    controller: viewModel.emailController,
                                     inputType: InputType.email,
                                     prefixIcon: Icons.email,
                                     haveInformation: true,
@@ -90,7 +72,7 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                                   Spacing.vertical(30),
                                   CustomTextInput(
                                     label: 'Senha',
-                                    controller: passwordController,
+                                    controller: viewModel.passwordController,
                                     inputType: InputType.password,
                                     prefixIcon: Icons.lock,
                                     haveInformation: true,
@@ -102,14 +84,14 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                                   Spacing.vertical(30),
                                   CustomTextInput(
                                     label: 'Confirme a Senha',
-                                    controller: confirmPasswordController,
+                                    controller: viewModel.confirmPasswordController,
                                     inputType: InputType.password,
                                     prefixIcon: Icons.lock,
                                     haveInformation: true,
                                     information:
                                         'Confirme sua senha, para garantir que você digitou corretamente.',
                                     validator: (value) {
-                                      if (value != passwordController.text) {
+                                      if (value != viewModel.passwordController.text) {
                                         return 'As senhas não coincidem';
                                       }
                                       return null;
@@ -117,17 +99,17 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                   ),
                                   Spacing.vertical(50),
-                                                                     Align(
-                                     alignment: Alignment.centerLeft,
-                                     child: Text(
-                                       'Nos informe mais sobre você:',
-                                       style: AppTypography.bodyText1,
-                                     ),
-                                   ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Nos informe mais sobre você:',
+                                      style: AppTypography.bodyText1,
+                                    ),
+                                  ),
                                   Spacing.vertical(30),
                                   CustomTextInput(
                                     label: 'Nome completo',
-                                    controller: nameController,
+                                    controller: viewModel.nameController,
                                     inputType: InputType.name,
                                     prefixIcon: Icons.person,
                                     haveInformation: true,
@@ -139,7 +121,7 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                                   Spacing.vertical(30),
                                   CustomTextInput(
                                     label: 'Número de telefone',
-                                    controller: phoneController,
+                                    controller: viewModel.phoneController,
                                     inputType: InputType.phone,
                                     prefixIcon: Icons.phone,
                                     haveInformation: true,
@@ -151,7 +133,7 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                                   Spacing.vertical(30),
                                   CustomTextInput(
                                     label: 'Data de nascimento',
-                                    controller: birthDateController,  
+                                    controller: viewModel.birthDateController,  
                                     inputType: InputType.date,
                                     prefixIcon: Icons.calendar_month,
                                     haveInformation: true,
@@ -165,13 +147,10 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                               ),
                             ),
                           ),
-                          // Botão fixo na parte inferior
                           Container(
                             padding: const EdgeInsets.all(24.0),
                             child: AppButton(
-                              onPressed: (){
-                                //WkoutNavigationService().pushWithExtra(context, AuthRoutes.registerProfile, null);
-                              },
+                              onPressed: () => _handleContinuePressed(context, viewModel),
                               label: 'Continuar',
                               color: AppColors.primary,
                               textColor: Colors.white,
@@ -189,5 +168,36 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
         ),
       ),
     );
+  }
+
+  void _handleContinuePressed(BuildContext context, RegisterPasswordViewModel viewModel) {
+    // Validar todos os campos
+    final errors = viewModel.validateAllFields();
+    
+    if (errors.isNotEmpty) {
+      // Mostrar erro se houver campos inválidos
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Por favor, corrija os seguintes erros:\n${errors.join('\n')}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+      return;
+    }
+
+    // Se todos os campos estão válidos, navegar para a próxima tela
+    try {
+      final parameters = viewModel.getRegistrationParameters();
+      debugPrint('RegisterPasswordPage: ${parameters.toString()}');
+      WkoutNavigationService().pushWithExtra(context, AuthRoutes.registerProfile, parameters.toExtra());
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao processar dados: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }
