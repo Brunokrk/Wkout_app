@@ -1,4 +1,6 @@
 import 'package:authentication/src/domain/usecases/auth_usecase.dart';
+import 'package:authentication/src/presentation/pages/register/register_password_page.dart';
+import 'package:authentication/src/presentation/pages/register/register_password_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:wkout_core/wkout_core.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,7 @@ import '../presentation/pages/register/register_profile_view_model.dart';
 
 class AuthRoutes implements WkoutModuleRoutes {
   static const String home = '/';
+  static const String registerPassword = '/register-password';
   static const String registerProfile = '/register-profile';
 
   @override
@@ -17,14 +20,25 @@ class AuthRoutes implements WkoutModuleRoutes {
         GoRoute(
           path: home,
           builder: (context, state) => ChangeNotifierProvider(
-            create: (_) => AuthHomeViewModel(authUseCase: WkoutInjector.I.get<AuthUseCase>()),
+            create: (_) => AuthHomeViewModel(
+                authUseCase: WkoutInjector.I.get<AuthUseCase>()),
             child: const AuthHomePage(),
+          ),
+        ),
+          GoRoute(
+              path: registerPassword,
+              builder: (context, state) => ChangeNotifierProvider<RegisterPasswordViewModel>(
+            create: (_) => RegisterPasswordViewModel(
+                authUseCase: WkoutInjector.I.get<AuthUseCase>()),
+            child: const RegisterPasswordPage(),
           ),
         ),
         GoRoute(
           path: registerProfile,
-          builder: (context, state) => ChangeNotifierProvider<RegisterProfileViewModel>(
-            create: (context) => RegisterProfileViewModel(authUseCase: WkoutInjector.I.get<AuthUseCase>()),
+          builder: (context, state) =>
+              ChangeNotifierProvider<RegisterProfileViewModel>(
+            create: (context) => RegisterProfileViewModel(
+                authUseCase: WkoutInjector.I.get<AuthUseCase>()),
             child: const RegisterProfilePage(),
           ),
         ),

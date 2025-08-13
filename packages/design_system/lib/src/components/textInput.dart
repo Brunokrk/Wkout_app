@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 enum InputType {
   email,
@@ -8,6 +9,7 @@ enum InputType {
   name,
   genericPrefixIcon,
   largeTextInput,
+  date,
 }
 
 class CustomTextInput extends StatefulWidget {
@@ -55,6 +57,8 @@ class _CustomTextInputState extends State<CustomTextInput> {
         return _buildGenericPrefixIconInput();
       case InputType.largeTextInput:
         return _buildLargeTextInput();
+      case InputType.date:
+        return _buildDateInput();
       default:
         return _buildDefaultInput();
     }
@@ -92,9 +96,10 @@ class _CustomTextInputState extends State<CustomTextInput> {
         icon: Icon(Icons.email),
         fillColor: AppColors.backgroundLight,
         filled: true,
-        constraints: (widget.validator != null || widget.autovalidateMode != null)
-            ? null
-            : BoxConstraints(minHeight: 40, maxHeight: 40),
+        constraints:
+            (widget.validator != null || widget.autovalidateMode != null)
+                ? null
+                : BoxConstraints(minHeight: 40, maxHeight: 40),
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         suffixIcon: widget.haveInformation == true
             ? InfoTooltip(
@@ -119,9 +124,10 @@ class _CustomTextInputState extends State<CustomTextInput> {
         icon: Icon(Icons.password),
         fillColor: AppColors.backgroundLight,
         filled: true,
-        constraints: (widget.validator != null || widget.autovalidateMode != null)
-            ? null
-            : BoxConstraints(maxHeight: 40),
+        constraints:
+            (widget.validator != null || widget.autovalidateMode != null)
+                ? null
+                : BoxConstraints(maxHeight: 40),
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         suffixIcon: widget.haveInformation == true
             ? InfoTooltip(
@@ -144,9 +150,10 @@ class _CustomTextInputState extends State<CustomTextInput> {
         floatingLabelBehavior: FloatingLabelBehavior.never,
         fillColor: AppColors.backgroundLight,
         filled: true,
-        constraints: (widget.validator != null || widget.autovalidateMode != null)
-            ? null
-            : BoxConstraints(maxHeight: 40),
+        constraints:
+            (widget.validator != null || widget.autovalidateMode != null)
+                ? null
+                : BoxConstraints(maxHeight: 40),
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       ),
     );
@@ -165,8 +172,10 @@ class _CustomTextInputState extends State<CustomTextInput> {
         icon: Icon(Icons.phone),
         fillColor: AppColors.backgroundLight,
         filled: true,
-        //constraints: BoxConstraints(maxHeight: 40),
-        //contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+        constraints: (widget.validator != null || widget.autovalidateMode != null)
+            ? null
+            : BoxConstraints( maxHeight: 40),
+            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         suffixIcon: widget.haveInformation == true
             ? InfoTooltip(
                 message: widget.information ?? "",
@@ -190,9 +199,10 @@ class _CustomTextInputState extends State<CustomTextInput> {
         icon: Icon(Icons.person),
         fillColor: AppColors.backgroundLight,
         filled: true,
-        constraints: (widget.validator != null || widget.autovalidateMode != null)
-            ? null
-            : BoxConstraints(maxHeight: 40),
+        constraints:
+            (widget.validator != null || widget.autovalidateMode != null)
+                ? null
+                : BoxConstraints(maxHeight: 40),
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         suffixIcon: widget.haveInformation == true
             ? InfoTooltip(
@@ -221,7 +231,8 @@ class _CustomTextInputState extends State<CustomTextInput> {
         filled: true,
         icon: Icon(widget.prefixIcon),
         alignLabelWithHint: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         suffixIcon: widget.haveInformation == true
             ? Padding(
                 padding: const EdgeInsets.only(bottom: 50),
@@ -232,6 +243,72 @@ class _CustomTextInputState extends State<CustomTextInput> {
               )
             : null,
       ),
+    );
+  }
+
+  Widget _buildDateInput() {
+    return TextFormField(
+      controller: widget.controller,
+      validator: widget.validator,
+      autovalidateMode: widget.autovalidateMode,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        _DateInputFormatter(),
+      ],
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        labelText: widget.label,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        icon: Icon(Icons.calendar_month),
+        fillColor: AppColors.backgroundLight,
+        filled: true,
+        constraints:
+            (widget.validator != null || widget.autovalidateMode != null)
+                ? null
+                : BoxConstraints(minHeight: 40, maxHeight: 40),
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+        suffixIcon: widget.haveInformation == true
+            ? InfoTooltip(
+                message: widget.information ?? "",
+                iconSize: 20,
+              )
+            : null,
+      ),
+    );
+  }
+}
+
+class _DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Remove todos os caracteres não numéricos
+    final text = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+    
+    if (text.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
+    
+    // Aplica a máscara DD/MM/AAAA
+    String formattedText = '';
+    
+    if (text.length <= 2) {
+      formattedText = text;
+    } else if (text.length <= 4) {
+      formattedText = '${text.substring(0, 2)}/${text.substring(2)}';
+    } else if (text.length <= 8) {
+      formattedText = '${text.substring(0, 2)}/${text.substring(2, 4)}/${text.substring(4)}';
+    } else {
+      // Limita a 8 dígitos (DDMMAAAA)
+      formattedText = '${text.substring(0, 2)}/${text.substring(2, 4)}/${text.substring(4, 8)}';
+    }
+    
+    return newValue.copyWith(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: formattedText.length),
     );
   }
 }

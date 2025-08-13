@@ -52,5 +52,64 @@ class Validators {
       return null;
     };
   }
+
+  static StringValidator birthDate({
+    String emptyMessage = 'Informe sua data de nascimento',
+    String formatMessage = 'Formato inválido. Use DD/MM/AAAA',
+    String invalidDateMessage = 'Data inválida',
+    String ageMessage = 'Você deve ter pelo menos 13 anos',
+    int minAge = 13,
+  }) {
+    return (value) {
+      final text = (value ?? '').trim();
+      if (text.isEmpty) return emptyMessage;
+      
+      // Verifica o formato DD/MM/AAAA
+      final dateRegex = RegExp(r'^(\d{2})/(\d{2})/(\d{4})$');
+      final match = dateRegex.firstMatch(text);
+      
+      if (match == null) return formatMessage;
+      
+      final day = int.tryParse(match.group(1)!);
+      final month = int.tryParse(match.group(2)!);
+      final year = int.tryParse(match.group(3)!);
+      
+      if (day == null || month == null || year == null) return formatMessage;
+      
+      // Valida se a data é válida
+      try {
+        final date = DateTime(year, month, day);
+        
+        // Verifica se a data criada corresponde aos valores informados
+        if (date.day != day || date.month != month || date.year != year) {
+          return invalidDateMessage;
+        }
+        
+        // Verifica se a data não é no futuro
+        final now = DateTime.now();
+        if (date.isAfter(now)) {
+          return 'Data de nascimento não pode ser no futuro';
+        }
+        
+        // Verifica a idade mínima
+        final age = now.year - date.year;
+        final monthDiff = now.month - date.month;
+        final dayDiff = now.day - date.day;
+        
+        int actualAge = age;
+        if (monthDiff < 0 || (monthDiff == 0 && dayDiff < 0)) {
+          actualAge--;
+        }
+        
+        if (actualAge < minAge) {
+          return ageMessage;
+        }
+        
+        return null;
+      } catch (e) {
+        return invalidDateMessage;
+      }
+    };
+  }
 }
 

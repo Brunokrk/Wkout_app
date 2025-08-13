@@ -16,17 +16,12 @@ class AuthHomePage extends StatefulWidget {
 
 class _AuthHomePageState extends State<AuthHomePage> {
   late ScrollController _scrollController;
+  bool _showValidationErrors = false;
 
   // Controllers para o formulário de login
   late TextEditingController _loginEmailController;
   late TextEditingController _loginPasswordController;
 
-  // Controllers para o formulário de registro
-  late TextEditingController _registerNameController;
-  late TextEditingController _registerEmailController;
-  late TextEditingController _registerPasswordController;
-  late TextEditingController _registerAgeController;
-  late TextEditingController _registerConfirmPasswordController;
   @override
   void initState() {
     _scrollController = ScrollController()
@@ -36,11 +31,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
 
     _loginEmailController = TextEditingController();
     _loginPasswordController = TextEditingController();
-    _registerNameController = TextEditingController();
-    _registerEmailController = TextEditingController();
-    _registerPasswordController = TextEditingController();
-    _registerAgeController = TextEditingController();
-    _registerConfirmPasswordController = TextEditingController();
+
     super.initState();
   }
 
@@ -49,11 +40,6 @@ class _AuthHomePageState extends State<AuthHomePage> {
     _scrollController.dispose();
     _loginEmailController.dispose();
     _loginPasswordController.dispose();
-    _registerNameController.dispose();
-    _registerEmailController.dispose();
-    _registerPasswordController.dispose();
-    _registerAgeController.dispose();
-    _registerConfirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -62,12 +48,6 @@ class _AuthHomePageState extends State<AuthHomePage> {
     _loginPasswordController.clear();
   }
 
-  void _clearRegisterFields() {
-    _registerNameController.clear();
-    _registerEmailController.clear();
-    _registerPasswordController.clear();
-    _registerAgeController.clear();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,57 +55,60 @@ class _AuthHomePageState extends State<AuthHomePage> {
       child: Scaffold(
         body: SolidBackgroundWidget(
           color: AppColors.backgroundLight,
-          child: Consumer<AuthHomeViewModel>(
-            builder: (context, viewModel, child) {
-              return GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: viewModel.authStep == AuthSteps.initial
-                    ? Container(
-                        height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: AuthImageWidget(
-                                imagePath: AuthenticationImagePaths.logoPNG,
-                                width: 200,
+          child: WkoutLoading<AuthHomeViewModel>(
+            child: Consumer<AuthHomeViewModel>(
+              builder: (context, viewModel, child) {
+                return GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: viewModel.authStep == AuthSteps.initial
+                      ? Container(
+                          height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: AuthImageWidget(
+                                  imagePath: AuthenticationImagePaths.logoPNG,
+                                  width: 200,
+                                ),
+                              ),
+                              Spacing.vertical(80),
+                              _buildAuthOptions(viewModel),
+                            ],
+                          ),
+                        )
+                      : CustomScrollView(
+                          controller: _scrollController,
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Container(
+                                height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: AuthImageWidget(
+                                        imagePath: AuthenticationImagePaths.logoPNG,
+                                        width: 200,
+                                      ),
+                                    ),
+                                    Spacing.vertical(60),
+                                    _buildLoginForm(viewModel),
+                                    // if (viewModel.authStep == AuthSteps.register)
+                                    //   _buildRegisterForm(viewModel),
+                                    // if (viewModel.authStep == AuthSteps.login)
+                                    //   _buildLoginForm(viewModel),
+                                  ],
+                                ),
                               ),
                             ),
-                            Spacing.vertical(80),
-                            _buildAuthOptions(viewModel),
                           ],
                         ),
-                      )
-                    : CustomScrollView(
-                        controller: _scrollController,
-                        slivers: [
-                          SliverToBoxAdapter(
-                            child: Container(
-                              height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: AuthImageWidget(
-                                      imagePath: AuthenticationImagePaths.logoPNG,
-                                      width: 200,
-                                    ),
-                                  ),
-                                  Spacing.vertical(60),
-                                  if (viewModel.authStep == AuthSteps.register)
-                                    _buildRegisterForm(viewModel),
-                                  if (viewModel.authStep == AuthSteps.login)
-                                    _buildLoginForm(viewModel),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -167,7 +150,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
             TextButton(
                 onPressed: () {
                   _clearLoginFields();
-                  viewModel.toggleAuthStep(AuthSteps.register);
+                  WkoutNavigationService().push(context, AuthRoutes.registerPassword);
                 },
                 child: Text(
                   "Ainda não possuo uma conta!",
@@ -177,75 +160,6 @@ class _AuthHomePageState extends State<AuthHomePage> {
                       fontWeight: FontWeight.w600),
                 )),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRegisterForm(AuthHomeViewModel viewModel) {
-    final formKey = GlobalKey<FormState>();
-    return Container(
-      width: 340,
-      decoration: BoxDecoration(
-        color: AppColors.grey,
-        borderRadius: BorderRadius.circular(40),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(32, 32, 32, 32),
-        child: Form(
-          key: formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CustomTextInput(
-                  label: "Nome completo",
-                  controller: _registerNameController,
-                    inputType: InputType.name,
-                    validator: Validators.fullName()),
-              Spacing.vertical(24),
-              CustomTextInput(
-                  label: "Email",
-                  inputType: InputType.email,
-                    controller: _registerEmailController,
-                    validator: Validators.email()),
-              Spacing.vertical(24),
-              CustomTextInput(
-                  label: "Senha",
-                  controller: _registerPasswordController,
-                    inputType: InputType.password,
-                    validator: Validators.password()),
-              Spacing.vertical(24),
-              CustomTextInput(
-                  label: "Confirmar senha",
-                  controller: _registerConfirmPasswordController,
-                    inputType: InputType.password,
-                    validator: Validators.password()),
-                  
-              Spacing.vertical(32),
-              AppButton(
-                  label: "Continuar",
-                  onPressed: () {
-                      if (formKey.currentState?.validate() == true) {
-                        WkoutNavigationService()
-                            .push(context, AuthRoutes.registerProfile);
-                      }
-                  }),
-              Spacing.vertical(16),
-              TextButton(
-                  onPressed: () {
-                    _clearRegisterFields();
-                    viewModel.toggleAuthStep(AuthSteps.login);
-                  },
-                  child: Text(
-                    "Já possuo uma conta!",
-                    style: TextStyle(
-                        color: AppColors.blackText,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
-                  )),
-            ],
-          ),
         ),
       ),
     );
@@ -270,7 +184,6 @@ class _AuthHomePageState extends State<AuthHomePage> {
                 label: "Já possuo uma conta",
                 kind: ButtonKind.primary,
                 onPressed: () {
-                  _clearRegisterFields();
                   viewModel.toggleAuthStep(AuthSteps.login);
                 },
               ),
@@ -280,7 +193,8 @@ class _AuthHomePageState extends State<AuthHomePage> {
                 kind: ButtonKind.secondary,
                 onPressed: () {
                   _clearLoginFields();
-                  viewModel.toggleAuthStep(AuthSteps.register);
+                  WkoutNavigationService().push(context, AuthRoutes.registerPassword);
+                  //viewModel.toggleAuthStep(AuthSteps.register);
                 },
               ),
             ],

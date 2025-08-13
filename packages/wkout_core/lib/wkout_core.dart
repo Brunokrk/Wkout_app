@@ -2,6 +2,7 @@ library wkout_core;
 
 // Base classes
 export 'base/wkout_base_view_model.dart';
+export 'base/wkout_base_parameters.dart';
 export 'data/wkout_base_service.dart';
 
 // Injector
