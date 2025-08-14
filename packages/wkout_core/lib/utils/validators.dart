@@ -111,5 +111,21 @@ class Validators {
       }
     };
   }
+
+  static StringValidator phone({
+    String emptyMessage = 'Informe seu número de telefone',
+    String formatMessage = 'Formato inválido. Use (00)00000-0000',
+  }) {
+    return (value) {
+      final text = (value ?? '').trim();
+      if (text.isEmpty) return emptyMessage;
+      
+      // Verifica o formato (00)00000-0000
+      final phoneRegex = RegExp(r'^\(\d{2}\)\d{5}-\d{4}$');
+      if (!phoneRegex.hasMatch(text)) return formatMessage;
+      
+      return null;
+    };
+  }
 }
 

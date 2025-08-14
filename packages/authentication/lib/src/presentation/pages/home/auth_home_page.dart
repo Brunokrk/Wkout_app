@@ -58,10 +58,7 @@ class _AuthHomePageState extends State<AuthHomePage> {
           child: WkoutLoading<AuthHomeViewModel>(
             child: Consumer<AuthHomeViewModel>(
               builder: (context, viewModel, child) {
-                return GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                  },
+                return KeyboardDismissible(
                   child: viewModel.authStep == AuthSteps.initial
                       ? Container(
                           height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,

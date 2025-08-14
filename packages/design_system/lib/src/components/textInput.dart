@@ -165,6 +165,10 @@ class _CustomTextInputState extends State<CustomTextInput> {
       validator: widget.validator,
       autovalidateMode: widget.autovalidateMode,
       keyboardType: TextInputType.phone,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        _PhoneInputFormatter(),
+      ],
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         labelText: widget.label,
@@ -306,6 +310,38 @@ class _DateInputFormatter extends TextInputFormatter {
       formattedText = '${text.substring(0, 2)}/${text.substring(2, 4)}/${text.substring(4, 8)}';
     }
     
+    return newValue.copyWith(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: formattedText.length),
+    );
+  }
+}
+
+class _PhoneInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    if (text.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
+
+    String formattedText = '';
+
+    if (text.length <= 2) {
+      formattedText = '(${text}';
+    } else if (text.length <= 7) {
+      formattedText = '(${text.substring(0, 2)})${text.substring(2)}';
+    } else if (text.length <= 11) {
+      formattedText = '(${text.substring(0, 2)})${text.substring(2, 7)}-${text.substring(7)}';
+    } else {
+      // Limita a 11 dígitos (DDD + 9 dígitos)
+      formattedText = '(${text.substring(0, 2)})${text.substring(2, 7)}-${text.substring(7, 11)}';
+    }
+
     return newValue.copyWith(
       text: formattedText,
       selection: TextSelection.collapsed(offset: formattedText.length),

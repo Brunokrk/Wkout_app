@@ -69,7 +69,7 @@ class RegisterPasswordViewModel extends WkoutBaseViewModel {
   }
 
   String? _validatePhone() {
-    return Validators.required(message: 'Informe seu número de telefone')(phoneController.text);
+    return Validators.phone()(phoneController.text);
   }
 
   String? _validateBirthDate() {
