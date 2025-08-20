@@ -1,4 +1,5 @@
 import 'package:authentication/authentication.dart';
+import 'package:authentication/src/presentation/parameters/register_profile_parameters.dart';
 import 'package:authentication/src/routes/auth_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
@@ -68,7 +69,8 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                                       information:
                                           'Seu e-mail, será usado para acessar o app.',
                                       validator: Validators.email(),
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
                                     Spacing.vertical(30),
                                     CustomTextInput(
@@ -80,24 +82,28 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                                       information:
                                           'Sua senha, será usada para acessar o app.',
                                       validator: Validators.password(),
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
                                     Spacing.vertical(30),
                                     CustomTextInput(
                                       label: 'Confirme a Senha',
-                                      controller: viewModel.confirmPasswordController,
+                                      controller:
+                                          viewModel.confirmPasswordController,
                                       inputType: InputType.password,
                                       prefixIcon: Icons.lock,
                                       haveInformation: true,
                                       information:
                                           'Confirme sua senha, para garantir que você digitou corretamente.',
                                       validator: (value) {
-                                        if (value != viewModel.passwordController.text) {
+                                        if (value !=
+                                            viewModel.passwordController.text) {
                                           return 'As senhas não coincidem';
                                         }
                                         return null;
                                       },
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
                                     Spacing.vertical(50),
                                     Align(
@@ -117,7 +123,8 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                                       information:
                                           'Seu nome, será usado para identificar você no app.',
                                       validator: Validators.fullName(),
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
                                     Spacing.vertical(30),
                                     CustomTextInput(
@@ -129,19 +136,21 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                                       information:
                                           'Seu número de telefone, pode ser usado para envios de SMS.',
                                       validator: Validators.phone(),
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
                                     Spacing.vertical(30),
                                     CustomTextInput(
                                       label: 'Data de nascimento',
-                                      controller: viewModel.birthDateController,  
+                                      controller: viewModel.birthDateController,
                                       inputType: InputType.date,
                                       prefixIcon: Icons.calendar_month,
                                       haveInformation: true,
                                       information:
                                           'Sua data de nascimento, será usada para calcular sua idade e para fins de segurança.',
                                       validator: Validators.birthDate(),
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
                                     Spacing.vertical(30),
                                   ],
@@ -151,11 +160,26 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                             Container(
                               padding: const EdgeInsets.all(24.0),
                               child: AppButton(
-                                onPressed: () => _handleContinuePressed(context, viewModel),
+                                //onPressed: () => _handleContinuePressed(context, viewModel),
+                                onPressed: () {
+                                  final mockRegisterProfileParameters =
+                                      RegisterProfileParameters(
+                                    email: 'usuario.teste@exemplo.com',
+                                    password: 'Senha123!',
+                                    name: 'João Silva Santos',
+                                    phone: '+55 11 99999-8888',
+                                    birthDate: '1990-05-15',
+                                  );
+                                  WkoutNavigationService().pushWithExtra(
+                                      context,
+                                      AuthRoutes.registerProfile,
+                                      mockRegisterProfileParameters.toExtra());
+                                },
                                 label: 'Continuar',
                                 color: AppColors.primary,
                                 textColor: Colors.white,
-                                disabled: !viewModel.isFormValid,
+                                disabled: false,
+                                //  disabled: !viewModel.isFormValid,
                               ),
                             ),
                           ],
@@ -172,14 +196,16 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
     );
   }
 
-  void _handleContinuePressed(BuildContext context, RegisterPasswordViewModel viewModel) {
+  void _handleContinuePressed(
+      BuildContext context, RegisterPasswordViewModel viewModel) {
     // Validar todos os campos
     final errors = viewModel.validateAllFields();
-    
+
     if (errors.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Por favor, corrija os seguintes erros:\n${errors.join('\n')}'),
+          content: Text(
+              'Por favor, corrija os seguintes erros:\n${errors.join('\n')}'),
           backgroundColor: Colors.red,
           duration: const Duration(seconds: 5),
         ),
@@ -191,7 +217,8 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
     try {
       final parameters = viewModel.getRegistrationParameters();
       debugPrint('RegisterPasswordPage: ${parameters.toString()}');
-      WkoutNavigationService().pushWithExtra(context, AuthRoutes.registerProfile, parameters.toExtra());
+      WkoutNavigationService().pushWithExtra(
+          context, AuthRoutes.registerProfile, parameters.toExtra());
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

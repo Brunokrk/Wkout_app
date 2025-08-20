@@ -35,6 +35,8 @@ class CustomChip extends StatefulWidget {
 class _CustomChipState extends State<CustomChip> {
   @override
   Widget build(BuildContext context) {
+    final isDisabled = widget.onTap == null;
+    
     return GestureDetector(
       onTap: widget.onTap,
       child: AnimatedContainer(
@@ -49,7 +51,9 @@ class _CustomChipState extends State<CustomChip> {
           border: Border.all(
             color: widget.isSelected 
               ? (widget.selectedColor ?? AppColors.primary)
-              : AppColors.primary.withOpacity(0.3),
+              : isDisabled 
+                ? AppColors.secondary.withOpacity(0.3)
+                : AppColors.primary.withOpacity(0.3),
             width: 1.5,
           ),
           boxShadow: widget.isSelected ? [
@@ -69,7 +73,9 @@ class _CustomChipState extends State<CustomChip> {
                 size: 16,
                 color: widget.isSelected 
                   ? (widget.selectedTextColor ?? Colors.white)
-                  : (widget.unselectedTextColor ?? AppColors.primary),
+                  : isDisabled 
+                    ? AppColors.secondary.withOpacity(0.5)
+                    : (widget.unselectedTextColor ?? AppColors.primary),
               ),
               const SizedBox(width: 6),
             ],
@@ -78,7 +84,9 @@ class _CustomChipState extends State<CustomChip> {
               style: AppTypography.bodyText1.copyWith(
                 color: widget.isSelected 
                   ? (widget.selectedTextColor ?? Colors.white)
-                  : (widget.unselectedTextColor ?? AppColors.secondary),
+                  : isDisabled 
+                    ? AppColors.secondary.withOpacity(0.5)
+                    : (widget.unselectedTextColor ?? AppColors.secondary),
                 fontWeight: widget.isSelected ? FontWeight.w600 : FontWeight.w500,
               ),
             ),

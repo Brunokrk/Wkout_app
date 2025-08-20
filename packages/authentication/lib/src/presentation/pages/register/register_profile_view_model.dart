@@ -25,7 +25,9 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
   // Validação de campos
   bool get isFormValid {
     return userNameController.text.trim().isNotEmpty &&
-           phoneController.text.trim().isNotEmpty;
+           phoneController.text.trim().isNotEmpty &&
+           selectedActivities.isNotEmpty &&
+           selectedActivities.length <= 6;
   }
   
   // Número de atividades selecionadas
@@ -35,6 +37,12 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
   bool isActivitySelected(String activityName) {
     return selectedActivities.contains(activityName);
   }
+  
+  // Verifica se pode selecionar mais atividades
+  bool get canSelectMoreActivities => selectedActivities.length < 6;
+  
+  // Verifica se tem pelo menos uma atividade selecionada
+  bool get hasMinimumActivities => selectedActivities.isNotEmpty;
   
   // Getter para acessar os dados dos parâmetros
   String get email => parameters?.email ?? '';
@@ -62,7 +70,13 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
     if (selectedActivities.contains(activityName)) {
       selectedActivities.remove(activityName);
     } else {
+      // Verifica se já atingiu o limite máximo de 6 atividades
+      if (selectedActivities.length >= 6) {
+        setScreenErrorText('Você pode selecionar no máximo 6 atividades.');
+        return;
+      }
       selectedActivities.add(activityName);
+      clearScreenError(); // Limpa erro anterior se houver
     }
     notifyListeners();
   }
@@ -75,6 +89,17 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
 
   Future<void> submitRegistration() async {
     try {
+      // Validação específica para atividades
+      if (!hasMinimumActivities) {
+        setScreenErrorText('Selecione pelo menos uma atividade favorita.');
+        return;
+      }
+      
+      if (selectedActivities.length > 6) {
+        setScreenErrorText('Você pode selecionar no máximo 6 atividades.');
+        return;
+      }
+
       if (!isFormValid) {
         setScreenErrorText('Por favor, preencha todos os campos obrigatórios.');
         return;
