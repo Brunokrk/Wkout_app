@@ -44,16 +44,34 @@ class AppButton extends StatelessWidget {
           child: (disabled)
               ? FilledButton(
                   onPressed: null,
-                  child: Text(label, style: TextStyle(color: textColor ?? AppColors.whiteText),),
+                  child: (isLoading)
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : Text(label, style: TextStyle(color: textColor ?? AppColors.whiteText),),
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(color ?? AppColors.primary),
+                    backgroundColor: MaterialStateProperty.all(color ?? AppColors.primary),
                   ),
                 )
               : FilledButton(
                   onPressed: onPressed,
-                  child: Text(label, style: TextStyle(color: textColor ?? AppColors.whiteText),),
+                  child: (isLoading)
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : Text(label, style: TextStyle(color: textColor ?? AppColors.whiteText),),
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(color ?? AppColors.primary),
+                    backgroundColor: MaterialStateProperty.all(color ?? AppColors.primary),
                   ),
                 ),
         );
@@ -64,16 +82,34 @@ class AppButton extends StatelessWidget {
           child: (disabled)
               ? OutlinedButton(
                   onPressed: null,
-                  child: Text(label, style: TextStyle(color: textColor ?? AppColors.blackText),),
+                  child: (isLoading)
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                          ),
+                        )
+                      : Text(label, style: TextStyle(color: textColor ?? AppColors.blackText),),
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(color ?? AppColors.secondary),
+                    backgroundColor: MaterialStateProperty.all(color ?? AppColors.secondary),
                   ),
                 )
               : OutlinedButton(
                   onPressed: onPressed,
-                  child: Text(label, style: TextStyle(color: textColor ?? AppColors.blackText),),
+                  child: (isLoading)
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                          ),
+                        )
+                      : Text(label, style: TextStyle(color: textColor ?? AppColors.blackText),),
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(color ?? AppColors.secondary),
+                    backgroundColor: MaterialStateProperty.all(color ?? AppColors.secondary),
                   ),
                 ),
         );

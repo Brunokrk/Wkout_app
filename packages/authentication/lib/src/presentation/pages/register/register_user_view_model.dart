@@ -8,7 +8,7 @@ import '../../../domain/usecases/auth_usecase.dart';
 import '../../../data/repositories/auth_repository.dart';
 
 /// ViewModel que gerencia o estado da tela de registro de senha e mais informações
-class RegisterPasswordViewModel extends WkoutBaseViewModel {
+class RegisterUserViewModel extends WkoutBaseViewModel {
   final AuthUseCase authUseCase;
   
   final TextEditingController emailController = TextEditingController();
@@ -20,7 +20,7 @@ class RegisterPasswordViewModel extends WkoutBaseViewModel {
 
   late RegisterProfileParameters registrationParameters;
 
-  RegisterPasswordViewModel({AuthUseCase? authUseCase})
+  RegisterUserViewModel({AuthUseCase? authUseCase})
       : authUseCase = authUseCase ?? AuthUseCase(
           repository: AuthRepository(authService: WkoutInjector.I.get<AuthService>()),
         ) {

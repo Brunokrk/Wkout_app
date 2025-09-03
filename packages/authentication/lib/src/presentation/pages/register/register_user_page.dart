@@ -6,44 +6,37 @@ import 'package:design_system/design_system.dart';
 import 'package:wkout_core/wkout_core.dart';
 import 'package:authentication/src/data/activities_data.dart';
 import 'package:provider/provider.dart';
-import 'register_password_view_model.dart';
+import 'register_user_view_model.dart';
 import '../../widgets/profile_image_picker.dart';
 
-class RegisterPasswordPage extends StatefulWidget {
-  const RegisterPasswordPage({super.key});
+class RegisterUserPage extends StatefulWidget {
+  const RegisterUserPage({super.key});
 
   @override
-  State<RegisterPasswordPage> createState() => _RegisterPasswordPageState();
+  State<RegisterUserPage> createState() => _RegisterUserPageState();
 }
 
-class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
+class _RegisterUserPageState extends State<RegisterUserPage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Criação de conta',
-          onBackPressed: () {
-            WkoutNavigationService().pop(context);
-          },
-        ),
-        backgroundColor: AppColors.primary,
-        body: WkoutLoading<RegisterPasswordViewModel>(
-          child: Consumer<RegisterPasswordViewModel>(
-            builder: (context, viewModel, child) {
-              return KeyboardDismissible(
-                child: Column(
-                  children: [
-                    // Área inferior com borda superior arredondada
-                    Expanded(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: AppColors.backgroundLight,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30),
-                          ),
-                        ),
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: 'Criação de conta',
+        onBackPressed: () {
+          WkoutNavigationService().pop(context);
+        },
+      ),
+      body: SafeArea(
+        child: SolidBackgroundWidget(
+          color: AppColors.backgroundLight,
+          child: WkoutLoading<RegisterUserViewModel>(
+            child: Consumer<RegisterUserViewModel>(
+              builder: (context, viewModel, child) {
+                return KeyboardDismissible(
+                  child: Column(
+                    children: [
+                      // Área inferior com borda superior arredondada
+                      Expanded(
                         child: Column(
                           children: [
                             Expanded(
@@ -160,22 +153,23 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                             Container(
                               padding: const EdgeInsets.all(24.0),
                               child: AppButton(
-                                //onPressed: () => _handleContinuePressed(context, viewModel),
-                                onPressed: () {
-                                  final mockRegisterProfileParameters =
-                                      RegisterProfileParameters(
-                                    email: 'usuario.teste@exemplo.com',
-                                    password: 'Senha123!',
-                                    name: 'João Silva Santos',
-                                    phone: '+55 11 99999-8888',
-                                    birthDate: '1990-05-15',
-                                  );
-                                  WkoutNavigationService().pushWithExtra(
-                                      context,
-                                      AuthRoutes.registerProfile,
-                                      mockRegisterProfileParameters.toExtra());
-                                },
-                                label: 'Continuar',
+                                onPressed: () =>
+                                    _handleContinuePressed(context, viewModel),
+                                // onPressed: () {
+                                //   final mockRegisterProfileParameters =
+                                //       RegisterProfileParameters(
+                                //     email: 'usuario.teste@exemplo.com',
+                                //     password: 'Senha123!',
+                                //     name: 'João Silva Santos',
+                                //     phone: '+55 11 99999-8888',
+                                //     birthDate: '1990-05-15',
+                                //   );
+                                //   WkoutNavigationService().pushWithExtra(
+                                //       context,
+                                //       AuthRoutes.registerProfile,
+                                //       mockRegisterProfileParameters.toExtra());
+                                // },
+                                label: 'Cadastrar',
                                 color: AppColors.primary,
                                 textColor: Colors.white,
                                 disabled: false,
@@ -185,11 +179,11 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -197,7 +191,7 @@ class _RegisterPasswordPageState extends State<RegisterPasswordPage> {
   }
 
   void _handleContinuePressed(
-      BuildContext context, RegisterPasswordViewModel viewModel) {
+      BuildContext context, RegisterUserViewModel viewModel) {
     // Validar todos os campos
     final errors = viewModel.validateAllFields();
 

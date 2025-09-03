@@ -13,7 +13,6 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
   final RegisterProfileParameters? parameters;
   
   final TextEditingController userNameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   
   // Estado da imagem de perfil
@@ -22,12 +21,67 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
   // Lista de atividades selecionadas
   final List<String> selectedActivities = [];
   
+  RegisterProfileViewModel({
+    AuthUseCase? authUseCase,
+    this.parameters,
+  }) : authUseCase = authUseCase ?? AuthUseCase(
+          repository: AuthRepository(authService: WkoutInjector.I.get<AuthService>()),
+        ) {
+    // Adicionar listeners para atualizar o estado quando os campos mudarem
+    userNameController.addListener(_onFieldChanged);
+    bioController.addListener(_onFieldChanged);
+  }
+
+  void _onFieldChanged() {
+    notifyListeners();
+  }
+  
   // Validação de campos
   bool get isFormValid {
-    return userNameController.text.trim().isNotEmpty &&
-           phoneController.text.trim().isNotEmpty &&
-           selectedActivities.isNotEmpty &&
-           selectedActivities.length <= 6;
+    return validateUserName() == null &&
+           validateBio() == null &&
+           validateActivities() == null;
+  }
+  
+  // Validação individual de campos
+  String? validateUserName() {
+    if (userNameController.text.trim().isEmpty) {
+      return 'Nome de usuário é obrigatório';
+    }
+    return null;
+  }
+  
+  String? validateBio() {
+    if (bioController.text.trim().isEmpty) {
+      return 'Biografia é obrigatória';
+    }
+    return null;
+  }
+  
+  String? validateActivities() {
+    if (selectedActivities.isEmpty) {
+      return 'Selecione pelo menos uma atividade';
+    }
+    if (selectedActivities.length > 6) {
+      return 'Máximo de 6 atividades permitidas';
+    }
+    return null;
+  }
+  
+  /// Valida todos os campos e retorna uma lista de erros
+  List<String> validateAllFields() {
+    final errors = <String>[];
+    
+    final userNameError = validateUserName();
+    if (userNameError != null) errors.add(userNameError);
+    
+    final bioError = validateBio();
+    if (bioError != null) errors.add(bioError);
+    
+    final activitiesError = validateActivities();
+    if (activitiesError != null) errors.add(activitiesError);
+    
+    return errors;
   }
   
   // Número de atividades selecionadas
@@ -51,14 +105,6 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
   String get phone => parameters?.phone ?? '';
   String get birthDate => parameters?.birthDate ?? '';
 
-  RegisterProfileViewModel({
-    AuthUseCase? authUseCase,
-    this.parameters,
-  }) : authUseCase = authUseCase ?? AuthUseCase(
-          repository: AuthRepository(authService: WkoutInjector.I.get<AuthService>()),
-        ) ;
-
-
   /// Atualiza a imagem de perfil vinda da UI
   void setProfileImage(Uint8List? imageBytes) {
     selectedProfileImage = imageBytes;
@@ -72,11 +118,9 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
     } else {
       // Verifica se já atingiu o limite máximo de 6 atividades
       if (selectedActivities.length >= 6) {
-        setScreenErrorText('Você pode selecionar no máximo 6 atividades.');
         return;
       }
       selectedActivities.add(activityName);
-      clearScreenError(); // Limpa erro anterior se houver
     }
     notifyListeners();
   }
@@ -86,59 +130,42 @@ class RegisterProfileViewModel extends WkoutBaseViewModel {
     notifyListeners();
   }
 
-
-  Future<void> submitRegistration() async {
+  Future<bool> submitRegistration() async {
     try {
-      // Validação específica para atividades
-      if (!hasMinimumActivities) {
-        setScreenErrorText('Selecione pelo menos uma atividade favorita.');
-        return;
-      }
-      
-      if (selectedActivities.length > 6) {
-        setScreenErrorText('Você pode selecionar no máximo 6 atividades.');
-        return;
-      }
-
-      if (!isFormValid) {
-        setScreenErrorText('Por favor, preencha todos os campos obrigatórios.');
-        return;
-      }
-
       if (parameters == null) {
-        setScreenErrorText('Parâmetros de registro não encontrados.');
-        return;
+        return false;
       }
 
       toggleScreenLoading();
-      clearScreenError();
 
       /// TO-DO: Envio backend
       
       notifyListeners();
+      return true;
     } catch (e) {
-      setScreenErrorText('Erro ao cadastrar perfil: $e');
+      return false;
     } finally {
-      toggleScreenLoading();
+      if (screenLoading) {
+        toggleScreenLoading();
+      }
     }
   }
 
   /// Limpa todos os campos do formulário
   void clearForm() {
     userNameController.clear();
-    phoneController.clear();
     bioController.clear();
     selectedProfileImage = null;
     selectedActivities.clear();
-    clearScreenError();
     notifyListeners();
   }
 
-
   @override
   void dispose() {
+    userNameController.removeListener(_onFieldChanged);
+    bioController.removeListener(_onFieldChanged);
+    
     userNameController.dispose();
-    phoneController.dispose();
     bioController.dispose();
     super.dispose();
   }

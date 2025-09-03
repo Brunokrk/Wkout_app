@@ -48,12 +48,11 @@ class _AuthHomePageState extends State<AuthHomePage> {
     _loginPasswordController.clear();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SolidBackgroundWidget(
+    return Scaffold(
+      body: SafeArea(
+        child: SolidBackgroundWidget(
           color: AppColors.backgroundLight,
           child: WkoutLoading<AuthHomeViewModel>(
             child: Consumer<AuthHomeViewModel>(
@@ -61,7 +60,8 @@ class _AuthHomePageState extends State<AuthHomePage> {
                 return KeyboardDismissible(
                   child: viewModel.authStep == AuthSteps.initial
                       ? Container(
-                          height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+                          height: MediaQuery.of(context).size.height -
+                              MediaQuery.of(context).padding.top,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -81,13 +81,15 @@ class _AuthHomePageState extends State<AuthHomePage> {
                           slivers: [
                             SliverToBoxAdapter(
                               child: Container(
-                                height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+                                height: MediaQuery.of(context).size.height -
+                                    MediaQuery.of(context).padding.top,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Center(
                                       child: AuthImageWidget(
-                                        imagePath: AuthenticationImagePaths.logoPNG,
+                                        imagePath:
+                                            AuthenticationImagePaths.logoPNG,
                                         width: 200,
                                       ),
                                     ),
@@ -147,7 +149,8 @@ class _AuthHomePageState extends State<AuthHomePage> {
             TextButton(
                 onPressed: () {
                   _clearLoginFields();
-                  WkoutNavigationService().push(context, AuthRoutes.registerPassword);
+                  WkoutNavigationService()
+                      .push(context, AuthRoutes.registerPassword);
                 },
                 child: Text(
                   "Ainda não possuo uma conta!",
@@ -190,7 +193,8 @@ class _AuthHomePageState extends State<AuthHomePage> {
                 kind: ButtonKind.secondary,
                 onPressed: () {
                   _clearLoginFields();
-                  WkoutNavigationService().push(context, AuthRoutes.registerPassword);
+                  WkoutNavigationService()
+                      .push(context, AuthRoutes.registerPassword);
                   //viewModel.toggleAuthStep(AuthSteps.register);
                 },
               ),

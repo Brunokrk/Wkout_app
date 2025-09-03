@@ -36,7 +36,7 @@ class AuthUseCase extends WkoutBaseService {
       );
 
       // Regras de negócio pós-login
-      _validateUserAfterLogin(user);
+     // _validateUserAfterLogin(user);
 
       // Atualizar estado
       _currentUser = user;
@@ -69,7 +69,7 @@ class AuthUseCase extends WkoutBaseService {
       );
 
       // Regras de negócio pós-registro
-      _validateUserAfterRegister(user);
+      //_validateUserAfterRegister(user);
 
       // Atualizar estado
       _currentUser = user;
@@ -112,7 +112,7 @@ class AuthUseCase extends WkoutBaseService {
       final user = await repository.updateUser(user: updatedUser);
       
       // Regras de negócio pós-atualização
-      _validateUserAfterUpdate(user);
+     // _validateUserAfterUpdate(user);
 
       // Atualizar estado
       _currentUser = user;

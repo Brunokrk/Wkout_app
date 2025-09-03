@@ -1,5 +1,6 @@
 import 'package:authentication/authentication.dart';
 import 'package:authentication/src/presentation/parameters/register_profile_parameters.dart';
+import 'package:authentication/src/routes/auth_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:design_system/design_system.dart';
 import 'package:wkout_core/wkout_core.dart';
@@ -83,6 +84,8 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
                                       haveInformation: true,
                                       information:
                                           'É um nome único, por onde outros usuários poderão te encontrar.',
+                                      validator: (value) => viewModel.validateUserName(),
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                     ),
                                   
                                     Spacing.vertical(20),
@@ -94,6 +97,8 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
                                       haveInformation: true,
                                       information:
                                           'Um resumo sobre você, que ficará visível para outros usuários.',
+                                      validator: (value) => viewModel.validateBio(),
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                     ),
                                     Spacing.vertical(20),
                                     Row(
@@ -120,7 +125,6 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        
                                         Text(
                                           '${viewModel.selectedActivitiesCount}/6',
                                             textAlign: TextAlign.end,
@@ -171,15 +175,13 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
                              
                             ),
                             child: AppButton(
-                              onPressed: viewModel.isFormValid
-                                  ? () {
-                                      viewModel.submitRegistration();
-                                    }
-                                  : () {},
-                              label: 'Cadastrar',
+                              onPressed: () => _handleSubmitPressed(context, viewModel),
+                              label: viewModel.screenLoading ? 'Cadastrando...' : 'Cadastrar',
                               color: AppColors.primary,
-                            textColor: AppColors.whiteText,
-                          ),
+                              textColor: AppColors.whiteText,
+                              disabled: !viewModel.isFormValid || viewModel.screenLoading,
+                              isLoading: viewModel.screenLoading,
+                            ),
                         ),
                       ],
                     ),
@@ -187,5 +189,44 @@ class _RegisterProfilePageState extends State<RegisterProfilePage> {
                 },
               ),
             )));
+  }
+
+  void _handleSubmitPressed(
+      BuildContext context, RegisterProfileViewModel viewModel) async {
+    // Validar todos os campos
+    final errors = viewModel.validateAllFields();
+
+    if (errors.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Por favor, corrija os seguintes erros:\n${errors.join('\n')}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+      return;
+    }
+    // Se todos os campos estão válidos, submeter o registro
+    final success = await viewModel.submitRegistration();
+    
+    if (success) {
+      // TODO: Navegar para próxima tela após sucesso
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Perfil cadastrado com sucesso!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      WkoutNavigationService().push(context, AuthRoutes.home);
+
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao cadastrar perfil. Tente novamente.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

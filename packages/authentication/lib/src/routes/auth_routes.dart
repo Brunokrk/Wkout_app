@@ -1,6 +1,6 @@
 import 'package:authentication/src/domain/usecases/auth_usecase.dart';
-import 'package:authentication/src/presentation/pages/register/register_password_page.dart';
-import 'package:authentication/src/presentation/pages/register/register_password_view_model.dart';
+import 'package:authentication/src/presentation/pages/register/register_user_page.dart';
+import 'package:authentication/src/presentation/pages/register/register_user_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:wkout_core/wkout_core.dart';
 import 'package:provider/provider.dart';
@@ -28,10 +28,10 @@ class AuthRoutes implements WkoutModuleRoutes {
         ),
           GoRoute(
               path: registerPassword,
-              builder: (context, state) => ChangeNotifierProvider<RegisterPasswordViewModel>(
-            create: (_) => RegisterPasswordViewModel(
+              builder: (context, state) => ChangeNotifierProvider<RegisterUserViewModel>(
+            create: (_) => RegisterUserViewModel(
                 authUseCase: WkoutInjector.I.get<AuthUseCase>()),
-            child: const RegisterPasswordPage(),
+            child: const RegisterUserPage(),
           ),
         ),
         GoRoute(
